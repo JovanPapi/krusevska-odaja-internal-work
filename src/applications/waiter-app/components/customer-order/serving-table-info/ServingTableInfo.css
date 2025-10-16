@@ -1,0 +1,47 @@
+.servingTableInfo-wrapper {
+  min-height: 480px;
+  max-height: 480px;
+  overflow-y: auto;
+  border: 1px solid white;
+  border-radius: 2%;
+  flex-basis: 64.5%;
+}
+
+.servingTableInfo-table-of-products {
+  text-align: center;
+  row-gap: 0.5rem;
+  border-collapse: collapse;
+  border: 1px solid white;
+  border-radius: 2%;
+  width: 100%;
+
+  th {
+    border: 1px solid white;
+    width: 100px;
+    height: 50px;
+    font-size: 1.1rem;
+    border-right: 1px solid black;
+  }
+
+  thead > tr {
+    background-color: white;
+  }
+
+  td {
+    border-bottom: 1px solid white;
+    color: white;
+    font-size: 1rem;
+  }
+
+  td:nth-child(1) {
+    border-right: 1px solid white;
+  }
+
+  tbody > tr {
+    height: 71px;
+  }
+
+  tbody > tr:hover {
+    background-color: #3a3939;
+  }
+}

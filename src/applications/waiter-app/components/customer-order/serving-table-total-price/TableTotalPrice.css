@@ -1,0 +1,28 @@
+.orderPrice-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  width: 57vw;
+  margin-top: 2rem;
+}
+
+.orderPrice-flex-item {
+  display: flex;
+  column-gap: 3%;
+  justify-content: end;
+  align-content: center;
+
+  p {
+    font-size: 1.5rem;
+    color: white;
+    font-weight: 500;
+    margin: 0;
+  }
+
+  input {
+    text-align: end;
+    cursor: default;
+    height: 4.5vh;
+    font-size: 1.5rem;
+  }
+}

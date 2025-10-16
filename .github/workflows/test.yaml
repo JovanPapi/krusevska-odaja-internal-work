@@ -1,0 +1,15 @@
+name: Workflow pipeline for tests
+
+# Triger na pipeline, odnosno ke se povika sekogas koga ke se napravi pull request na main granka
+on:
+  pull_request:
+    branches: ["main"]
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4 # ?
+      - run: npm ci # npm clean install - proveri dali site zavisnosti (dependencies) ke bidat uspesno instalirani
+      - run: npm run build # izbildaj go proektot, kompaliraj go

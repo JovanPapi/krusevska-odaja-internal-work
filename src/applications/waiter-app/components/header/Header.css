@@ -1,0 +1,123 @@
+.header-wrapper {
+  border-bottom: 1px solid white;
+  border-right: 1px solid white;
+  border-bottom-right-radius: 10px;
+  width: fit-content;
+}
+
+.header-flex-wrapper {
+  display: flex;
+  margin-left: 3rem;
+  margin-right: 0.6rem;
+  column-gap: 1rem;
+}
+
+.header-flex-wrapper-item {
+  display: flex;
+  column-gap: 1rem;
+  font-size: large;
+
+  input {
+    width: 40px;
+    text-align: center;
+    font-size: large;
+  }
+}
+
+.header-flex-wrapper-item-divider {
+  width: 5px;
+  height: 50px;
+  border-right: 1px solid white;
+  margin: auto 0px auto 0px;
+}
+
+.header-notification-panel-for-orders-active {
+  color: red;
+  font-size: 1.7rem;
+}
+.header-notification-panel-for-orders-inactive {
+  color: gray;
+  font-size: 1.7rem;
+}
+
+/* Waiter notication element */
+.header-notification-wrapper {
+  display: flex;
+}
+
+.header-notification-icon {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: white;
+  cursor: pointer;
+  position: relative;
+}
+
+.notification-bell-active {
+  font-size: 1.7rem;
+  color: #ff4d4f;
+  animation: pulse 1.8s infinite;
+}
+
+.notification-bell-inactive {
+  font-size: 1.7rem;
+  color: #a5a1a1;
+}
+
+.notification-text-active {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #ffbebe;
+}
+
+.notification-text-inactive {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #686565;
+}
+
+/* Tooltip dropdown */
+.header-notification-panel-title-wrapper {
+  display: flex;
+  flex-direction: column;
+  padding: 0.4rem;
+  row-gap: 0.6rem;
+  height: 200px;
+  overflow: auto;
+
+  p {
+    background-color: white;
+    border-radius: 0.55rem;
+    color: black;
+    padding: 0.4rem 0.6rem;
+    margin: 0;
+    font-size: 0.85rem;
+    box-shadow: 0 0 4px rgb(0, 0, 0, 0.15);
+    transition: transform 0.2s;
+  }
+
+  p:hover {
+    transform: translateX(8px);
+  }
+}
+
+/* Animations */
+@keyframes pulseText {
+  0% {
+    opacity: 0.3;
+    transform: translateY(-1px);
+  }
+  50% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  100% {
+    opacity: 0.3;
+    transform: translateY(-1px);
+  }
+}
+
+.animate-pulse-text {
+  animation: pulseText 2s ease infinite;
+}

@@ -1,0 +1,43 @@
+.viewTables-wrapper {
+  width: 250px;
+  background-color: antiquewhite;
+  color: black;
+  padding: 1rem;
+  font-size: 17px;
+
+  li {
+    border-radius: 4px;
+    padding: 0.5rem;
+    cursor: pointer;
+  }
+
+  li:hover {
+    background-color: rgb(218, 204, 187);
+  }
+}
+
+.viewTables-orders-table {
+  text-align: center;
+  row-gap: 0.5rem;
+  border-collapse: collapse;
+  border: 1px solid black;
+
+  th {
+    border: 1px solid black;
+    width: 100px;
+    height: 50px;
+  }
+
+  td {
+    border-bottom: 1px solid black;
+  }
+
+  td:nth-child(1) {
+    border-right: 1px solid black;
+  }
+
+  tbody > tr:hover {
+    background-color: rgb(218, 204, 187);
+    cursor: pointer;
+  }
+}

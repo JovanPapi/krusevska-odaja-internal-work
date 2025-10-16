@@ -1,0 +1,80 @@
+.application-starter-content-wrapper {
+  background: radial-gradient(circle at top left, #1a1f29, #0e121a);
+  font-family: "Poppins", sans-serif;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+
+  > div {
+    background: rgba(25, 30, 40, 0.75);
+    backdrop-filter: blur(12px);
+    border-radius: 16px;
+    padding: 40px 50px;
+    width: 35%;
+    text-align: center;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.4), 0 0 40px rgba(0, 123, 255, 0.05);
+
+    > h1 {
+      color: #fff;
+      font-size: 2rem;
+    }
+
+    > :nth-child(2) {
+      font-size: 0.95rem;
+      color: #aab0bc;
+      margin-bottom: 2rem;
+    }
+
+    > :nth-child(3) {
+      font-size: 0.95rem;
+      color: #fff;
+      margin-bottom: 20px;
+    }
+
+    > :nth-child(4) {
+      font-size: 0.95rem;
+      color: #aab0bc;
+    }
+  }
+}
+
+.button {
+  border-radius: 10px;
+  padding: 12px 0;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  color: white;
+  margin-bottom: 14px;
+  transition: 0.4s ease;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+}
+
+button.admin {
+  background: linear-gradient(135deg, #006eff, #0050cc);
+}
+
+button.admin:hover {
+  background: linear-gradient(135deg, #1a82ff, #0060e6) !important;
+  color: rgb(248, 233, 233) !important;
+}
+
+button.waiter {
+  background: linear-gradient(135deg, #2bbd6f, #1f9d5c);
+}
+
+button.waiter:hover {
+  background: linear-gradient(135deg, #34c77b, #27a66a) !important;
+  color: rgb(248, 233, 233) !important;
+}
+
+button.kitchen {
+  background: linear-gradient(135deg, #e96328, #c84b17);
+}
+
+button.kitchen:hover {
+  background: linear-gradient(135deg, #ff6f39, #e65a26) !important;
+  color: rgb(248, 233, 233) !important;
+}

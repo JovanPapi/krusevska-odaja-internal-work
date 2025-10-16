@@ -1,0 +1,10 @@
+.servingTable-wrapper {
+  margin: auto;
+  width: 70vw;
+  text-align: center;
+  margin-top: 5rem;
+
+  > input {
+    width: 20vw;
+  }
+}

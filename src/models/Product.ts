@@ -1,7 +1,7 @@
 import Ingredient from "./Ingredient";
 import Order from "./Order";
 
-/** A class used to map Product entiry from backend. */
+/** A class used to map Product entity from backend. */
 export default class Product {
   /** Main ID of the entity. */
   uuid?: string;

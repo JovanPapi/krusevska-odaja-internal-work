@@ -60,19 +60,25 @@ const MainApplication = () => {
     {
       key: 1,
       label: (
-        <span onClick={() => handleChangeLanguage("en")}>
+        <p
+          style={{ width: "100%", margin: 0, padding: "0.5rem" }}
+          onClick={() => handleChangeLanguage("en")}
+        >
           {intl.formatMessage({ id: "app.sideMenu.language.switcher.english" })}
-        </span>
+        </p>
       ),
     },
     {
       key: 2,
       label: (
-        <span onClick={() => handleChangeLanguage("mk")}>
+        <p
+          style={{ width: "100%", margin: 0, padding: "0.5rem" }}
+          onClick={() => handleChangeLanguage("mk")}
+        >
           {intl.formatMessage({
             id: "app.sideMenu.language.switcher.macedonian",
           })}
-        </span>
+        </p>
       ),
     },
   ];
@@ -89,8 +95,8 @@ const MainApplication = () => {
   };
 
   return (
-    <Layout style={{ width: "100vw", height: "100vh" }}>
-      <Sider width="fit-content" style={{ height: "100vh" }}>
+    <Layout>
+      <Sider>
         <Flex vertical gap="1.9rem">
           <Dropdown menu={{ items: changeLanguageMenu }}>
             <Button>

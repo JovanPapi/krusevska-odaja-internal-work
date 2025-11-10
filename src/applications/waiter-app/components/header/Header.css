@@ -1,15 +1,14 @@
 .header-wrapper {
-  border-bottom: 1px solid white;
-  border-right: 1px solid white;
-  border-bottom-right-radius: 10px;
-  width: fit-content;
+  display: flex;
+
+  flex-wrap: wrap;
+  column-gap: 0.7rem;
 }
 
 .header-flex-wrapper {
   display: flex;
-  margin-left: 3rem;
-  margin-right: 0.6rem;
   column-gap: 1rem;
+  align-items: center;
 }
 
 .header-flex-wrapper-item {

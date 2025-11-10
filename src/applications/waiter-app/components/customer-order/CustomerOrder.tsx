@@ -1,14 +1,14 @@
-import { useEffect, useState, useTransition } from "react";
-import { useIntl } from "react-intl";
-import Product from "../../../../models/Product";
-import { useApplicationStoreSelector } from "../../../../store/ApplicationStore";
-import { validateTableOrderFields } from "../../../../utils";
-// import "./CustomerOrder.css";
 import { Button, Checkbox, Col, Form, InputNumber, Row, Select } from "antd";
 import { useForm } from "antd/es/form/Form";
+import { useEffect, useState, useTransition } from "react";
+import { useIntl } from "react-intl";
 import Ingredient from "../../../../models/Ingredient";
 import OrderProduct from "../../../../models/OrderProduct";
+import Product from "../../../../models/Product";
+import { useApplicationStoreSelector } from "../../../../store/ApplicationStore";
 import { useLanguageSwitcherSelector } from "../../../../store/language-switcher/LanguageSwitcher";
+import { validateTableOrderFields } from "../../../../utils";
+import "./CustomerOrder.css";
 import ServingTableActions from "./serving-table-actions/ServingTableActions";
 import ServingTableInfo from "./serving-table-info/ServingTableInfo";
 import TableTotalPrice from "./serving-table-total-price/TableTotalPrice";
@@ -104,7 +104,7 @@ const CustomerOrder = () => {
   const validateFields = validateTableOrderFields();
 
   return (
-    <div style={{ padding: "1rem" }}>
+    <div className="customerOrder-wrapper">
       <Form id="selectProductForm" form={form} onFinish={handleConfirmButton}>
         <div
           style={{
@@ -278,8 +278,7 @@ const CustomerOrder = () => {
           display: "flex",
           justifyContent: "flex-start",
           columnGap: "5rem",
-          marginTop: "7rem",
-          height: "47vh",
+          marginTop: "5rem",
         }}
       >
         <ServingTableInfo />

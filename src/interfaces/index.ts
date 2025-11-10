@@ -10,6 +10,14 @@ export interface ActivePageStateProps {
   kitchenPage: boolean;
 }
 
+export interface AdministrationAppActivePage {
+  productsPage: boolean;
+  ingredientsPage: boolean;
+  waitersPage: boolean;
+  servingtablesPage: boolean;
+  paymentsPage: boolean;
+}
+
 /** Interface that defines shape of object meant for authorization modal component. */
 export interface AuthorizationModalStateProps {
   /** Property with type boolean, indicating is the modal is open or closed. */

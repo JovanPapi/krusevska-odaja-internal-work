@@ -27,10 +27,7 @@ const WaiterApp = () => {
   return (
     <>
       {isDataLoading === true ? (
-        <div
-          className="main-content"
-          style={{ width: "100vw", height: "100vh" }}
-        >
+        <div className="main-content">
           <Spin
             tip={
               <p style={{ fontSize: "1.5rem" }}>
@@ -44,17 +41,11 @@ const WaiterApp = () => {
           />
         </div>
       ) : (
-        <Layout>
-          <HeaderHTML
-            style={{
-              width: "100vw",
-              backgroundColor: "#242424",
-              height: "fit-content",
-            }}
-          >
+        <Layout style={{ width: "100%", height: "100%" }}>
+          <HeaderHTML className="waiter-app-header-wrapper">
             <Header />
           </HeaderHTML>
-          <Content className="main-content">
+          <Content className="waiter-app-main-content">
             <CustomerOrder />
           </Content>
         </Layout>

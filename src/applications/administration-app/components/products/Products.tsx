@@ -49,7 +49,7 @@ const Products = () => {
   const [tableParams, setTableParams] = useState<TableParams>({
     pagination: {
       current: 1,
-      pageSize: 10,
+      pageSize: 7,
     },
   });
 
@@ -180,6 +180,7 @@ const Products = () => {
           })}
         </Button>
       </div>
+
       <div style={{ marginTop: "1.5rem" }}>
         <Table<Product>
           rowKey={(product) => product.uuid as string}

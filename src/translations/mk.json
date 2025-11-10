@@ -13,6 +13,9 @@
 
   "header.notification.panel.waiter.news": "Известување од вкујна...",
   "header.notification.panel.waiter.noNews": "Нема ништо од вкујна...",
+  "header.dropdown.menuItem.text1": "Нарачка",
+  "header.dropdown.menuItem.text2": "за маса",
+  "header.dropdown.menuItem.text3": "е готова!",
 
   "notifyDialog.text.waiter.warn": "Мораш прво да внесиш келнер код преку полето за Келнер",
   "notifyDialog.text.ps": "(P.S Овај диалог ќе биде затворен автоматски после 5 секунди)",

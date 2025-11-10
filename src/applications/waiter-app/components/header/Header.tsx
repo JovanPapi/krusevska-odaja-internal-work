@@ -57,28 +57,22 @@ const Header = () => {
     saveSelectedServingTableByCode(tableNumber);
   };
 
-  const tempCompletedKOs = listCompletedKitchenOrders.map((ko) => {
-    return (
-      <p>{`Order ${ko.order?.code} for table ${ko.servingTable?.code} is ready!`}</p>
-    );
-  });
+  const tempCompletedKOs = () =>
+    listCompletedKitchenOrders.map((ko) => {
+      return (
+        <p>
+          {intl.formatMessage({ id: "header.dropdown.menuItem.text1" })}{" "}
+          {ko.order?.code}{" "}
+          {intl.formatMessage({ id: "header.dropdown.menuItem.text2" })}{" "}
+          {ko.servingTable?.code}{" "}
+          {intl.formatMessage({ id: "header.dropdown.menuItem.text3" })}
+        </p>
+      );
+    });
 
   return (
-    <div
-      style={{
-        display: "flex",
-        padding: "1rem",
-        flexWrap: "wrap",
-        columnGap: "0.7rem",
-      }}
-    >
-      <div
-        style={{
-          display: "flex",
-          columnGap: "1rem",
-          alignItems: "center",
-        }}
-      >
+    <div className="header-wrapper">
+      <div className="header-flex-wrapper">
         <p
           style={{
             margin: 0,
@@ -207,7 +201,7 @@ const Header = () => {
             placement="bottom"
             title={
               <div className="header-notification-panel-title-wrapper">
-                {tempCompletedKOs}
+                {tempCompletedKOs()}
               </div>
             }
           >

@@ -1,5 +1,5 @@
 import { Layout } from "antd";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import Header from "./components/header/Header";
 import Ingredients from "./components/ingredients/Ingredients";
 import Payment from "./components/payments/Payments";
@@ -14,11 +14,10 @@ const { Header: HeaderLayout, Content } = Layout;
  *  It serves as wrapper for all other components related to the administration page. */
 const AdministratorApp = () => {
   return (
-    <BrowserRouter>
-      <Layout>
+    <Layout>
+      <BrowserRouter>
         <HeaderLayout
           style={{
-            width: "100vw",
             backgroundColor: "#242424",
             height: "fit-content",
           }}
@@ -27,15 +26,16 @@ const AdministratorApp = () => {
         </HeaderLayout>
         <Content style={{ backgroundColor: "#4d4b4b" }}>
           <Routes>
-            <Route path="/products" Component={Products} />
-            <Route path="/ingredients" Component={Ingredients} />
-            <Route path="/waiters" Component={Waiters} />
-            <Route path="/payments" Component={Payment} />
-            <Route path="/serving-tables" Component={ServingTables} />
+            <Route path="/" element={<Navigate to="/products" replace />} />
+            <Route path="/products" element={<Products />} />
+            <Route path="/ingredients" element={<Ingredients />} />
+            <Route path="/waiters" element={<Waiters />} />
+            <Route path="/payments" element={<Payment />} />
+            <Route path="/serving-tables" element={<ServingTables />} />
           </Routes>
         </Content>
-      </Layout>
-    </BrowserRouter>
+      </BrowserRouter>
+    </Layout>
   );
 };
 

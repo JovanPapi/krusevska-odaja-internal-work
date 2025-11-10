@@ -30,7 +30,7 @@ const Payment = () => {
   const [tableParams, setTableParams] = useState<TableParams>({
     pagination: {
       current: 1,
-      pageSize: 10,
+      pageSize: 7,
     },
   });
 

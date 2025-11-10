@@ -13,6 +13,9 @@
 
   "header.notification.panel.waiter.news": "Notification from kitchen...",
   "header.notification.panel.waiter.noNews": "Nothing from kitchen...",
+  "header.dropdown.menuItem.text1": "Order",
+  "header.dropdown.menuItem.text2": "for table",
+  "header.dropdown.menuItem.text3": "is ready!",
 
   "notifyDialog.text.waiter.warn": "You must first select a waiter via waiter input field",
   "notifyDialog.text.ps": "(P.S This dialog will automatically close after 5 seconds)",

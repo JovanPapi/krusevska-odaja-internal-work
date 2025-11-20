@@ -1,20 +1,15 @@
+import { AdminDTO } from "../api/dto";
+import RestServices from "../api/services";
+import { ActivePageStateProps, AuthorizationModalStateProps } from "../interfaces";
 import { Button, Form, Input, Modal } from "antd";
 import { useForm } from "antd/es/form/Form";
 import { Dispatch, SetStateAction } from "react";
 import toast from "react-hot-toast";
 import { useIntl } from "react-intl";
-import RestServices from "../api/services";
-import {
-  ActivePageStateProps,
-  AuthorizationModalStateProps,
-} from "../interfaces";
-import { AdminDTO } from "../api/dto";
 
 interface ModalAuthorizeProps {
   authorizeModalState: AuthorizationModalStateProps;
-  setModalAuthorizeState: Dispatch<
-    SetStateAction<AuthorizationModalStateProps>
-  >;
+  setModalAuthorizeState: Dispatch<SetStateAction<AuthorizationModalStateProps>>;
   setActivePage: Dispatch<SetStateAction<ActivePageStateProps>>;
 }
 
@@ -23,16 +18,14 @@ interface ModalAuthorizeProps {
  * @param {Dispatch} setModalAuthorizeState Dispatch function that updates the state of the MainApplication.tsx.
  * @param {Dispatch} setActivePage Dispatch function that updates a state inside MainApplication.tsx.
  */
-const ModalAuthorize = ({
-  authorizeModalState,
-  setModalAuthorizeState,
-  setActivePage,
-}: ModalAuthorizeProps) => {
+const ModalAuthorize = ({ authorizeModalState, setModalAuthorizeState, setActivePage }: ModalAuthorizeProps) => {
   const [form] = useForm();
 
   const intl = useIntl();
 
-  if (authorizeModalState.modalOpen === false) return null;
+  if (authorizeModalState.modalOpen === false) {
+    return null;
+  }
 
   const handleCloseModal = () =>
     setModalAuthorizeState((prevState) => {
@@ -41,22 +34,22 @@ const ModalAuthorize = ({
 
   const activePage =
     authorizeModalState.activePage.administrationPage === true
-      ? "admin"
+      ? "adminPage"
       : authorizeModalState.activePage.kitchenPage === true
-      ? "kitchen"
-      : "waiter";
+        ? "kitchenPage"
+        : "waiterPage";
 
   const modalTitle =
-    activePage === "admin"
+    activePage === "adminPage"
       ? "modalAuthorize.title.adminPage"
-      : activePage === "waiter"
-      ? "modalAuthorize.title.waiterPage"
-      : "modalAuthorize.title.kitchenPage";
+      : activePage === "waiterPage"
+        ? "modalAuthorize.title.waiterPage"
+        : "modalAuthorize.title.kitchenPage";
 
   const handleAuthorizeUser = (adminDTO: AdminDTO) => {
     form.validateFields();
 
-    RestServices.krusevska_odaja_AuthenticateController
+    RestServices.authenticateController
       .authenticateUser(adminDTO)
       .then((responseJWT) => {
         sessionStorage.setItem("adminToken", responseJWT); // generated token for successfull login by an admin
@@ -88,22 +81,11 @@ const ModalAuthorize = ({
         <Button key="back" onClick={handleCloseModal}>
           {intl.formatMessage({ id: "modalAuthorize.button.close" })}
         </Button>,
-        <Button
-          type="primary"
-          form="authorizeForm"
-          htmlType="submit"
-          key="submit"
-        >
+        <Button type="primary" form="authorizeForm" htmlType="submit" key="submit">
           {intl.formatMessage({ id: "modalAuthorize.button.authorize" })}
         </Button>,
-      ]}
-    >
-      <Form<AdminDTO>
-        id="authorizeForm"
-        form={form}
-        layout="vertical"
-        onFinish={handleAuthorizeUser}
-      >
+      ]}>
+      <Form<AdminDTO> id="authorizeForm" form={form} layout="vertical" onFinish={handleAuthorizeUser}>
         <Form.Item<AdminDTO>
           name="username"
           className="username"
@@ -112,8 +94,7 @@ const ModalAuthorize = ({
           })}
           tooltip={intl.formatMessage({
             id: "modalAuthorize.form.label.username",
-          })}
-        >
+          })}>
           <Input />
         </Form.Item>
 
@@ -124,8 +105,7 @@ const ModalAuthorize = ({
           })}
           tooltip={intl.formatMessage({
             id: "modalAuthorize.form.label.password",
-          })}
-        >
+          })}>
           <Input.Password />
         </Form.Item>
       </Form>

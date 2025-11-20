@@ -1,37 +1,29 @@
+import { CreateTableWithFirstOrderDTO, SaveNewOrderToTableDTO } from "../../../../../api/dto";
+import RestServices from "../../../../../api/services";
+import OrderProduct from "../../../../../models/OrderProduct";
+import { useApplicationStoreSelector } from "../../../../../store/ApplicationStore";
+import ChargeTable from "../charge-table-modal/ChargeTable";
 import { Dispatch, SetStateAction, useState } from "react";
 import toast from "react-hot-toast";
 import { FaCheckDouble, FaMoneyCheck } from "react-icons/fa";
 import { PiNewspaperFill } from "react-icons/pi";
 import { useIntl } from "react-intl";
-import {
-  CreateTableWithFirstOrderDTO,
-  SaveNewOrderToTableDTO,
-} from "../../../../../api/dto";
-import RestServices from "../../../../../api/services";
-import OrderProduct from "../../../../../models/OrderProduct";
-import { useApplicationStoreSelector } from "../../../../../store/ApplicationStore";
-import ChargeTable from "../charge-table-modal/ChargeTable";
 import "./ServingTableActions.css";
 
-interface ServingTableActions {
+interface ServingTableActionsProps {
   setViewTables: Dispatch<SetStateAction<boolean>>;
 }
 
 /** Functional component used to display buttons with whom waiter can execute certain business logic, like create new table, create order, view table etc.
  * @param {Dispatch} setViewTables Dispatch function that updates local state inside CustomerOrder.tsx component.
  */
-const ServingTableActions = ({ setViewTables }: ServingTableActions) => {
+const ServingTableActions = ({ setViewTables }: ServingTableActionsProps) => {
   const intl = useIntl();
 
-  const [openChargeTableModal, setOpenChargeTableModal] =
-    useState<boolean>(false);
+  const [openChargeTableModal, setOpenChargeTableModal] = useState<boolean>(false);
 
-  const {
-    selectedServingTable,
-    selectedWaiter,
-    selectedServingTableOrder,
-    reloadDataForWaitersPageAfterCRUDAction,
-  } = useApplicationStoreSelector();
+  const { selectedServingTable, selectedWaiter, selectedServingTableOrder, reloadDataForWaitersPageAfterCRUDAction } =
+    useApplicationStoreSelector();
 
   const handleConfirmOrderForTable = () => {
     if (
@@ -47,12 +39,11 @@ const ServingTableActions = ({ setViewTables }: ServingTableActions) => {
       waiterUuid: String(selectedWaiter?.uuid),
       orderDTO: {
         code: selectedServingTableOrder?.code as number,
-        listOfOrderProducts:
-          selectedServingTableOrder?.listOfOrderProducts as OrderProduct[],
+        listOfOrderProducts: selectedServingTableOrder?.listOfOrderProducts as OrderProduct[],
       },
     };
 
-    RestServices.krusevska_odaja_ServingTableController
+    RestServices.servingTableController
       .updateExistingTableWithNewOrder(saveNewOrderToExistingTable)
       .then((response) => {
         toast.success(response);
@@ -68,17 +59,14 @@ const ServingTableActions = ({ setViewTables }: ServingTableActions) => {
       waiterUuid: selectedWaiter?.uuid,
       orderDTO: {
         code: selectedServingTableOrder?.code as number,
-        listOfOrderProducts:
-          selectedServingTableOrder?.listOfOrderProducts as OrderProduct[],
+        listOfOrderProducts: selectedServingTableOrder?.listOfOrderProducts as OrderProduct[],
       },
     };
 
-    RestServices.krusevska_odaja_ServingTableController
-      .createNewTableAndFirstOrder(requestBody)
-      .then((res) => {
-        toast.success(res);
-        reloadDataForWaitersPageAfterCRUDAction();
-      });
+    RestServices.servingTableController.createNewTableAndFirstOrder(requestBody).then((res) => {
+      toast.success(res);
+      reloadDataForWaitersPageAfterCRUDAction();
+    });
 
     setViewTables(false);
   };
@@ -86,11 +74,7 @@ const ServingTableActions = ({ setViewTables }: ServingTableActions) => {
   const handleChargeTableModalOpen = () => setOpenChargeTableModal(true);
 
   const createTableButtonDisable =
-    selectedServingTable === undefined
-      ? true
-      : selectedServingTable.servingTableStatus === "FREE"
-      ? false
-      : true;
+    selectedServingTable === undefined ? true : selectedServingTable.servingTableStatus === "FREE" ? false : true;
 
   const confirmOrderButtonDisable =
     selectedServingTableOrder?.listOfOrderProducts === undefined ||
@@ -100,8 +84,7 @@ const ServingTableActions = ({ setViewTables }: ServingTableActions) => {
       : false;
 
   const chargeTableButtonDisable =
-    selectedServingTable === undefined ||
-    selectedServingTable.servingTableStatus === "FREE";
+    selectedServingTable === undefined || selectedServingTable.servingTableStatus === "FREE";
 
   return (
     <div className="servingTableActions-wrapper">
@@ -109,12 +92,7 @@ const ServingTableActions = ({ setViewTables }: ServingTableActions) => {
         <button
           onClick={handleCreateTableAndFirstOrder}
           disabled={createTableButtonDisable}
-          className={
-            createTableButtonDisable === true
-              ? "servingTableActions-disabled-button"
-              : ""
-          }
-        >
+          className={createTableButtonDisable === true ? "servingTableActions-disabled-button" : ""}>
           <p>
             {intl.formatMessage({
               id: "servingTableActions.button.text.newOrder",
@@ -126,12 +104,7 @@ const ServingTableActions = ({ setViewTables }: ServingTableActions) => {
         <button
           onClick={handleConfirmOrderForTable}
           disabled={confirmOrderButtonDisable}
-          className={
-            confirmOrderButtonDisable === true
-              ? "servingTableActions-disabled-button"
-              : ""
-          }
-        >
+          className={confirmOrderButtonDisable === true ? "servingTableActions-disabled-button" : ""}>
           <p>
             {intl.formatMessage({
               id: "servingTableActions.button.text.confirmOrder",
@@ -144,12 +117,7 @@ const ServingTableActions = ({ setViewTables }: ServingTableActions) => {
         <button
           disabled={chargeTableButtonDisable}
           onClick={handleChargeTableModalOpen}
-          className={
-            chargeTableButtonDisable === true
-              ? "servingTableActions-disabled-button"
-              : ""
-          }
-        >
+          className={chargeTableButtonDisable === true ? "servingTableActions-disabled-button" : ""}>
           <p style={{ marginBottom: 0 }}>
             {intl.formatMessage({
               id: "servingTableActions.button.text.chargeTable",

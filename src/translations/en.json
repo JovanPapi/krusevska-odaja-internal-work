@@ -25,7 +25,6 @@
   "servingTableInfo.text.th.quantity": "Quantity",
   "servingTableInfo.text.th.price": "Price",
   "servingTableInfo.text.th.ingredients": "Ingredients",
-  "servingTableInfo.text.th.order": "Order",
 
   "servingTableActions.button.text.confirmOrder": "Confirm order",
   "servingTableActions.button.text.openTables": "Open tables",
@@ -162,9 +161,6 @@
   "orderPrice.text.tablePrice": "Table price",
   "orderPrice.text.newOrderPrice": "New order price",
   "orderPrice.text.denari": "Denari",
-
-  "servingTableInfo.text.td.oldOrder": "Old order",
-  "servingTableInfo.text.td.newOrder": "New order",
 
   "viewWaiterTables.text.noSelectedWaiter": "There is no selected waiter to display tables",
   "viewWaiterTables.text.waiterNoReservedTables": "The waiter has no reserved tables",

@@ -1,10 +1,9 @@
-import { Button, Form, Input, InputNumber, Modal } from "antd";
-import { Dispatch, SetStateAction } from "react";
 import RestServices from "../../../../api/services";
 import Waiter from "../../../../models/Waiter";
-
-import { useIntl } from "react-intl";
+import { Button, Form, Input, InputNumber, Modal } from "antd";
+import { Dispatch, SetStateAction } from "react";
 import toast from "react-hot-toast";
+import { useIntl } from "react-intl";
 
 interface CreateWaiterProps {
   createModalOpen: boolean;
@@ -18,11 +17,7 @@ interface CreateWaiterProps {
  *  upon updating the selected waiter
  * @param {Dispatch} setCreateModalOpen Dispatch function that updates local state of Waiters.tsx component
  */
-const CreateWaiter = ({
-  createModalOpen,
-  setReloadWaiters,
-  setCreateModalOpen,
-}: CreateWaiterProps) => {
+const CreateWaiter = ({ createModalOpen, setReloadWaiters, setCreateModalOpen }: CreateWaiterProps) => {
   const intl = useIntl();
 
   const [form] = Form.useForm();
@@ -35,13 +30,11 @@ const CreateWaiter = ({
     newWaiter.listOfOrders = [];
     newWaiter.listOfServingTables = [];
 
-    RestServices.krusevska_odaja_WaiterController
-      .createWaiter(newWaiter)
-      .then((res) => {
-        toast.success(res);
-        setCreateModalOpen(false);
-        setReloadWaiters((prevValue) => !prevValue);
-      });
+    RestServices.waiterController.createWaiter(newWaiter).then((res) => {
+      toast.success(res);
+      setCreateModalOpen(false);
+      setReloadWaiters((prevValue) => !prevValue);
+    });
   };
 
   const modalTitle = (
@@ -63,15 +56,8 @@ const CreateWaiter = ({
             id: "adminPage.button.create",
           })}
         </Button>,
-      ]}
-    >
-      <Form<Waiter>
-        id="createForm"
-        form={form}
-        onFinish={handleCreateWaiter}
-        labelCol={{ span: 8 }}
-        layout="vertical"
-      >
+      ]}>
+      <Form<Waiter> id="createForm" form={form} onFinish={handleCreateWaiter} labelCol={{ span: 8 }} layout="vertical">
         <Form.Item<Waiter>
           label={intl.formatMessage({ id: "adminPage.text.firstName" })}
           name="firstName"
@@ -85,13 +71,8 @@ const CreateWaiter = ({
                 id: "adminPage.createWaiter.input.validation.firstName",
               }),
             },
-          ]}
-        >
-          <Input
-            style={{ width: "65%" }}
-            pattern="[A-Za-z\s]*"
-            placeholder="Michael"
-          />
+          ]}>
+          <Input style={{ width: "65%" }} pattern="[A-Za-z\s]*" placeholder="Michael" />
         </Form.Item>
 
         <Form.Item<Waiter>
@@ -107,13 +88,8 @@ const CreateWaiter = ({
                 id: "adminPage.createWaiter.input.validation.lastName",
               }),
             },
-          ]}
-        >
-          <Input
-            style={{ width: "65%" }}
-            pattern="[A-Za-z\s]*"
-            placeholder="Jordan"
-          />
+          ]}>
+          <Input style={{ width: "65%" }} pattern="[A-Za-z\s]*" placeholder="Jordan" />
         </Form.Item>
 
         <Form.Item<Waiter>
@@ -129,15 +105,8 @@ const CreateWaiter = ({
                 id: "adminPage.editWaiter.input.validation.code",
               }),
             },
-          ]}
-        >
-          <InputNumber
-            style={{ width: "65%" }}
-            placeholder="5"
-            max={99}
-            min={0}
-            maxLength={2}
-          />
+          ]}>
+          <InputNumber style={{ width: "65%" }} placeholder="5" max={99} min={0} maxLength={2} />
         </Form.Item>
       </Form>
     </Modal>

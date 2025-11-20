@@ -1,8 +1,4 @@
 import { DeleteProductFromOrderDTO } from "../interfaces";
-import Ingredient from "../models/Ingredient";
-import KitchenOrder from "../models/KitchenOrder";
-import Product from "../models/Product";
-import Waiter from "../models/Waiter";
 import axiosApi from "./axiosApi";
 import {
   AdminDTO,
@@ -15,30 +11,25 @@ import {
   UpdateWaiterDTO,
 } from "./dto";
 import { endpoints } from "./endpoints";
+import Ingredient from "../models/Ingredient";
+import KitchenOrder from "../models/KitchenOrder";
+import Product from "../models/Product";
+import Waiter from "../models/Waiter";
 
 /** Object with nested objects who contains functions that make HTTP requests to specific APIs */
 const RestServices = {
   /** Contains functions that make HTTP requests to Authenticate API */
-  krusevska_odaja_AuthenticateController: {
+  authenticateController: {
     authenticateUser: (adminDTO: AdminDTO) =>
-      axiosApi<string>(
-        endpoints.authenticateController.authenticate(),
-        "POST",
-        adminDTO
-      ),
+      axiosApi<string>(endpoints.authenticateController.authenticate(), "POST", adminDTO),
   },
 
   /** Contains functions that make HTTP requests to Product API */
-  krusevska_odaja_ProductController: {
-    fetchProducts: () =>
-      axiosApi<Product[]>(endpoints.productController.fetchProducts(), "GET"),
+  productController: {
+    fetchProducts: () => axiosApi<Product[]>(endpoints.productController.fetchProducts(), "GET"),
 
     deleteProductById: (productId: string) =>
-      axiosApi<string>(
-        endpoints.productController.deleteProductById(),
-        "DELETE",
-        { productId }
-      ),
+      axiosApi<string>(endpoints.productController.deleteProductById(), "DELETE", { productId }),
 
     updateProduct: (productToUpdate: Product) =>
       axiosApi<string>(endpoints.productController.updateProduct(), "POST", {
@@ -52,55 +43,33 @@ const RestServices = {
   },
 
   /** Contains functions that make HTTP requests to Ingredient API */
-  krusevska_odaja_IngredientController: {
-    fetchIngredients: () =>
-      axiosApi<Ingredient[]>(
-        endpoints.ingredientController.fetchIngredients(),
-        "GET"
-      ),
+  ingredientController: {
+    fetchIngredients: () => axiosApi<Ingredient[]>(endpoints.ingredientController.fetchIngredients(), "GET"),
 
     deleteIngredientById: (ingredientId: string) =>
-      axiosApi<string>(
-        endpoints.ingredientController.deleteProductById(),
-        "DELETE",
-        { ingredientId }
-      ),
+      axiosApi<string>(endpoints.ingredientController.deleteProductById(), "DELETE", {
+        ingredientId,
+      }),
 
     updateIngredient: (ingredientToUpdate: Ingredient) =>
-      axiosApi<string>(
-        endpoints.ingredientController.updateIngredient(),
-        "POST",
-        { ingredientToUpdate }
-      ),
+      axiosApi<string>(endpoints.ingredientController.updateIngredient(), "POST", {
+        ingredientToUpdate,
+      }),
 
     createIngredient: (ingredientToCreate: Ingredient) =>
-      axiosApi<string>(
-        endpoints.ingredientController.createIngredient(),
-        "POST",
-        { ingredientToCreate }
-      ),
+      axiosApi<string>(endpoints.ingredientController.createIngredient(), "POST", {
+        ingredientToCreate,
+      }),
   },
 
   /** Contains functions that make HTTP requests to Waiter API */
-  krusevska_odaja_WaiterController: {
-    fetchWaitersForAdminPage: () =>
-      axiosApi<Waiter[]>(
-        endpoints.waiterController.fetchWaitersForAdminPage(),
-        "GET"
-      ),
+  waiterController: {
+    fetchWaitersForAdminPage: () => axiosApi<Waiter[]>(endpoints.waiterController.fetchWaitersForAdminPage(), "GET"),
 
-    fetchWaitersForWaiterPage: () =>
-      axiosApi<Waiter[]>(
-        endpoints.waiterController.fetchWaitersForWaiterPage(),
-        "GET"
-      ),
+    fetchWaitersForWaiterPage: () => axiosApi<Waiter[]>(endpoints.waiterController.fetchWaitersForWaiterPage(), "GET"),
 
     deleteWaiterById: (waiterUuid: string) =>
-      axiosApi<string>(
-        endpoints.waiterController.deleteWaiterById(),
-        "DELETE",
-        { waiterUuid }
-      ),
+      axiosApi<string>(endpoints.waiterController.deleteWaiterById(), "DELETE", { waiterUuid }),
 
     updateWaiter: (waiterToUpdate: UpdateWaiterDTO) =>
       axiosApi<string>(endpoints.waiterController.updateWaiter(), "POST", {
@@ -114,120 +83,77 @@ const RestServices = {
   },
 
   /** Contains functions that make HTTP requests to Payment API */
-  krusevska_odaja_Paymnets: {
-    fetchPayments: () =>
-      axiosApi<PaymentDTO[]>(
-        endpoints.paymentController.fetchPayments(),
-        "GET"
-      ),
+  paymnetsController: {
+    fetchPayments: () => axiosApi<PaymentDTO[]>(endpoints.paymentController.fetchPayments(), "GET"),
   },
 
   /** Contains functions that make HTTP requests to Serving Tables API */
-  krusevska_odaja_ServingTableController: {
-    fetchServingTables: () =>
-      axiosApi<ServingTableDTO[]>(
-        endpoints.servingTableController.fetchServingTables(),
-        "GET"
-      ),
+  servingTableController: {
+    fetchServingTables: () => axiosApi<ServingTableDTO[]>(endpoints.servingTableController.fetchServingTables(), "GET"),
 
     fetchServingTableById: (servingTableUuid: string) =>
-      axiosApi<ServingTableDTO>(
-        endpoints.servingTableController.fetchServingTableById(),
-        "POST",
-        { servingTableUuid }
-      ),
+      axiosApi<ServingTableDTO>(endpoints.servingTableController.fetchServingTableById(), "POST", {
+        servingTableUuid,
+      }),
 
     deleteServingTableById: (servingTableUuid: string) =>
-      axiosApi<string>(
-        endpoints.servingTableController.deleteServingTableById(),
-        "DELETE",
-        { servingTableUuid }
-      ),
+      axiosApi<string>(endpoints.servingTableController.deleteServingTableById(), "DELETE", {
+        servingTableUuid,
+      }),
 
     updateServingTable: (servingTableToUpdate: UpdateServingTableDTO) =>
-      axiosApi<string>(
-        endpoints.servingTableController.updateServingTable(),
-        "POST",
-        { servingTableToUpdate }
-      ),
+      axiosApi<string>(endpoints.servingTableController.updateServingTable(), "POST", {
+        servingTableToUpdate,
+      }),
 
     closeServingTableById: (servingTableUuid: string) =>
-      axiosApi<string>(
-        endpoints.servingTableController.closeServingTableById(),
-        "POST",
-        { servingTableUuid }
-      ),
+      axiosApi<string>(endpoints.servingTableController.closeServingTableById(), "POST", {
+        servingTableUuid,
+      }),
 
-    createNewTableAndFirstOrder: (
-      servingTableToCreate: CreateTableWithFirstOrderDTO
-    ) =>
-      axiosApi<string>(
-        endpoints.servingTableController.createNewTableAndFirstOrder(),
-        "POST",
-        {
-          servingTableToCreate,
-        }
-      ),
+    createNewTableAndFirstOrder: (servingTableToCreate: CreateTableWithFirstOrderDTO) =>
+      axiosApi<string>(endpoints.servingTableController.createNewTableAndFirstOrder(), "POST", {
+        servingTableToCreate,
+      }),
 
-    updateExistingTableWithNewOrder: (
-      servingTableToUpdate: SaveNewOrderToTableDTO
-    ) =>
-      axiosApi<string>(
-        endpoints.servingTableController.saveNewOrderToExistingTable(),
-        "POST",
-        { servingTableToUpdate }
-      ),
+    updateExistingTableWithNewOrder: (servingTableToUpdate: SaveNewOrderToTableDTO) =>
+      axiosApi<string>(endpoints.servingTableController.saveNewOrderToExistingTable(), "POST", {
+        servingTableToUpdate,
+      }),
 
     payTablePrice: (payServingTablePrice: PayTablePriceDTO) =>
-      axiosApi<string>(
-        endpoints.servingTableController.payTablePrice(),
-        "POST",
-        {
-          payServingTablePrice,
-        }
-      ),
+      axiosApi<string>(endpoints.servingTableController.payTablePrice(), "POST", {
+        payServingTablePrice,
+      }),
   },
 
   /** Contains functions that make HTTP requests to Orders API */
-  krusevska_odaja_OrderController: {
-    deleteProductFromOrder: (
-      deleteProductFromOrderDTO: DeleteProductFromOrderDTO
-    ) =>
-      axiosApi<string>(
-        endpoints.orderController.deleteOrderProductFromOrder(),
-        "DELETE",
-        { deleteProductFromOrderDTO }
-      ),
+  orderController: {
+    deleteProductFromOrder: (deleteProductFromOrderDTO: DeleteProductFromOrderDTO) =>
+      axiosApi<string>(endpoints.orderController.deleteOrderProductFromOrder(), "DELETE", {
+        deleteProductFromOrderDTO,
+      }),
 
     deleteOrderFromServingTable: (orderUuid: string) =>
-      axiosApi<string>(
-        endpoints.orderController.deleteOrderFromServingTable(),
-        "DELETE",
-        { orderUuid }
-      ),
+      axiosApi<string>(endpoints.orderController.deleteOrderFromServingTable(), "DELETE", {
+        orderUuid,
+      }),
   },
 
   /** Contains functions that make HTTP requests to Kitchen Orders API */
-  krusevska_odaja_KitchenOrdersController: {
+  kitchenOrdersController: {
     fetchUncompletedKitchenOrders: () =>
-      axiosApi<KitchenOrder[]>(
-        endpoints.kitchenOrdersController.fetchUncompletedKitchenOrders(),
-        "GET"
-      ),
+      axiosApi<KitchenOrder[]>(endpoints.kitchenOrdersController.fetchUncompletedKitchenOrders(), "GET"),
 
     fetchCompletedKitchenOrders: (waiterUuid: string) =>
-      axiosApi<KitchenOrder[]>(
-        endpoints.kitchenOrdersController.fetchCompletedKitchenOrtders(),
-        "POST",
-        { waiterUuid }
-      ),
+      axiosApi<KitchenOrder[]>(endpoints.kitchenOrdersController.fetchCompletedKitchenOrtders(), "POST", {
+        waiterUuid,
+      }),
 
     markKitchenOrderAsCompleted: (kitchenOrderUuid: string) =>
-      axiosApi<string>(
-        endpoints.kitchenOrdersController.markKitchenOrderAsCompleted(),
-        "POST",
-        { kitchenOrderUuid }
-      ),
+      axiosApi<string>(endpoints.kitchenOrdersController.markKitchenOrderAsCompleted(), "POST", {
+        kitchenOrderUuid,
+      }),
   },
 };
 

@@ -1,12 +1,11 @@
-import { Button, Form, InputNumber, Modal, Select } from "antd";
-import { DefaultOptionType } from "antd/es/select";
-import { Dispatch, SetStateAction } from "react";
 import { ServingTableDTO, UpdateServingTableDTO } from "../../../../api/dto";
 import RestServices from "../../../../api/services";
 import { useApplicationStoreSelector } from "../../../../store/ApplicationStore";
-
-import { useIntl } from "react-intl";
+import { Button, Form, InputNumber, Modal, Select } from "antd";
+import { DefaultOptionType } from "antd/es/select";
+import { Dispatch, SetStateAction } from "react";
 import toast from "react-hot-toast";
+import { useIntl } from "react-intl";
 
 interface EditServingTableProps {
   selectedServingTable: ServingTableDTO;
@@ -45,12 +44,10 @@ const EditServingTable = ({
       selectedServingTable: undefined,
     });
 
-  const handleEditServingTable = (
-    servingTableToUpdate: UpdateServingTableDTO
-  ) => {
+  const handleEditServingTable = (servingTableToUpdate: UpdateServingTableDTO) => {
     form.validateFields();
 
-    RestServices.krusevska_odaja_ServingTableController
+    RestServices.servingTableController
       .updateServingTable({
         uuid: selectedServingTable.uuid,
         waiterUuid: servingTableToUpdate.waiterUuid,
@@ -89,15 +86,13 @@ const EditServingTable = ({
         <Button key="submit" htmlType="submit" type="primary" form="editForm">
           {intl.formatMessage({ id: "adminPage.button.edit" })}
         </Button>,
-      ]}
-    >
+      ]}>
       <Form<UpdateServingTableDTO>
         id="editForm"
         labelCol={{ span: 8 }}
         form={form}
         onFinish={handleEditServingTable}
-        layout="vertical"
-      >
+        layout="vertical">
         <Form.Item<UpdateServingTableDTO>
           label={intl.formatMessage({ id: "adminPage.text.code" })}
           name="code"
@@ -112,8 +107,7 @@ const EditServingTable = ({
                 id: "adminPage.editServingTable.input.code.validation",
               }),
             },
-          ]}
-        >
+          ]}>
           <InputNumber style={{ width: "65%" }} placeholder="6" />
         </Form.Item>
 
@@ -133,8 +127,7 @@ const EditServingTable = ({
                 id: "adminPage.editServingTable.input.selectWaiter.validation",
               }),
             },
-          ]}
-        >
+          ]}>
           <Select
             style={{ width: "65%" }}
             options={originalWaiters.map((waiter): DefaultOptionType => {

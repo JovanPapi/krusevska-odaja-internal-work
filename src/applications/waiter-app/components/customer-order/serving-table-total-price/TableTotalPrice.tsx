@@ -1,6 +1,6 @@
+import { useApplicationStoreSelector } from "../../../../../store/ApplicationStore";
 import { Input } from "antd";
 import { useIntl } from "react-intl";
-import { useApplicationStoreSelector } from "../../../../../store/ApplicationStore";
 import "./TableTotalPrice.css";
 
 /** Functional component used to display total price of selected serving table and its new order, if there is a one. */
@@ -9,24 +9,16 @@ const TableTotalPrice = () => {
 
   const { selectedServingTableOrder } = useApplicationStoreSelector();
 
-  let newOrderPrice =
-    selectedServingTableOrder?.listOfOrderProducts?.reduce<number>(
-      (sum, product) => {
-        sum += (product.product?.price as number) * product.quantity;
+  const newOrderPrice = selectedServingTableOrder?.listOfOrderProducts?.reduce<number>((sum, product) => {
+    sum += (product.product?.price as number) * product.quantity;
 
-        return sum;
-      },
-      0
-    );
+    return sum;
+  }, 0);
 
   const newOrderPriceFinal =
     newOrderPrice === undefined
       ? ""
-      : String(
-          newOrderPrice +
-            " " +
-            intl.formatMessage({ id: "orderPrice.text.denari" })
-        );
+      : String(newOrderPrice + " " + intl.formatMessage({ id: "orderPrice.text.denari" }));
 
   return (
     <div className="orderPrice-wrapper">

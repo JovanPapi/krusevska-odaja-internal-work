@@ -1,20 +1,15 @@
+import { ActivePageStateProps, AuthorizationModalStateProps } from "../interfaces";
 import { Button, Layout } from "antd";
 import { Content } from "antd/es/layout/layout";
-import { useIntl } from "react-intl";
-
+import React from "react";
 import { FaUtensils } from "react-icons/fa";
 import { GiHotMeal } from "react-icons/gi";
 import { IoSettings } from "react-icons/io5";
-import {
-  ActivePageStateProps,
-  AuthorizationModalStateProps,
-} from "../interfaces";
+import { useIntl } from "react-intl";
 import "./ApplicationStarterLogin.css";
 
 interface ApplicationStarterLoginProps {
-  setAuthorizeModalState: React.Dispatch<
-    React.SetStateAction<AuthorizationModalStateProps>
-  >;
+  setAuthorizeModalState: React.Dispatch<React.SetStateAction<AuthorizationModalStateProps>>;
 }
 
 const adminPageActive: ActivePageStateProps = {
@@ -40,14 +35,10 @@ const waiterPageActive: ActivePageStateProps = {
  *  It's mandatory, through this page a user must be logged in, in order to use the functionalities of the system.
  *
  * @param {React.Dispatch} setAuthorizeModalState Dispatcher function that sets the state of the modal. */
-const ApplicationStarterLogin = ({
-  setAuthorizeModalState,
-}: ApplicationStarterLoginProps) => {
+const ApplicationStarterLogin = ({ setAuthorizeModalState }: ApplicationStarterLoginProps) => {
   const intl = useIntl();
 
-  const handlePageButtonOnClick = (
-    updatedModalActivePage: ActivePageStateProps
-  ) =>
+  const handlePageButtonOnClick = (updatedModalActivePage: ActivePageStateProps) =>
     setAuthorizeModalState({
       activePage: updatedModalActivePage,
       modalOpen: true,
@@ -57,9 +48,7 @@ const ApplicationStarterLogin = ({
     <Layout>
       <Content className="application-starter-content-wrapper">
         <div>
-          <h1>
-            {intl.formatMessage({ id: "applicationStarterLogin.title.1" })}
-          </h1>
+          <h1>{intl.formatMessage({ id: "applicationStarterLogin.title.1" })}</h1>
           <p>{intl.formatMessage({ id: "applicationStarterLogin.title.2" })}</p>
           <p>{intl.formatMessage({ id: "applicationStarterLogin.title.3" })}</p>
           <p>{intl.formatMessage({ id: "applicationStarterLogin.title.4" })}</p>
@@ -69,13 +58,11 @@ const ApplicationStarterLogin = ({
               flexDirection: "column",
               gap: "1rem",
               padding: "1.5rem",
-            }}
-          >
+            }}>
             <Button
               className="button admin"
               icon={<IoSettings fontSize={"1.8rem"} />}
-              onClick={() => handlePageButtonOnClick(adminPageActive)}
-            >
+              onClick={() => handlePageButtonOnClick(adminPageActive)}>
               {intl.formatMessage({
                 id: "applicationStarterLogin.button.admin",
               })}
@@ -85,8 +72,7 @@ const ApplicationStarterLogin = ({
               icon={<FaUtensils fontSize={"1.8rem"} />}
               onClick={() => {
                 handlePageButtonOnClick(waiterPageActive);
-              }}
-            >
+              }}>
               {intl.formatMessage({
                 id: "applicationStarterLogin.button.waiter",
               })}
@@ -94,8 +80,7 @@ const ApplicationStarterLogin = ({
             <Button
               className="button kitchen"
               icon={<GiHotMeal fontSize={"1.8rem"} />}
-              onClick={() => handlePageButtonOnClick(kitchenPageActive)}
-            >
+              onClick={() => handlePageButtonOnClick(kitchenPageActive)}>
               {intl.formatMessage({
                 id: "applicationStarterLogin.button.kitchen",
               })}

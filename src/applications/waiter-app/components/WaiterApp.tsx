@@ -1,10 +1,10 @@
-import { Layout, Spin } from "antd";
-import { useIntl } from "react-intl";
-import { useApplicationStoreSelector } from "../../../store/ApplicationStore";
-import "./WaiterApp.css";
 import CustomerOrder from "./customer-order/CustomerOrder";
 import Header from "./header/Header";
+import { useApplicationStoreSelector } from "../../../store/ApplicationStore";
+import { Layout, Spin } from "antd";
 import { useEffect } from "react";
+import { useIntl } from "react-intl";
+import "./WaiterApp.css";
 
 const { Header: HeaderHTML, Content } = Layout;
 
@@ -15,14 +15,13 @@ const { Header: HeaderHTML, Content } = Layout;
 const WaiterApp = () => {
   const intl = useIntl();
 
-  const { reloadDataForWaitersPageAfterCRUDAction } =
-    useApplicationStoreSelector();
+  const { reloadDataForWaitersPageAfterCRUDAction } = useApplicationStoreSelector();
 
   const { isDataLoading } = useApplicationStoreSelector();
 
   useEffect(() => {
     reloadDataForWaitersPageAfterCRUDAction();
-  }, []);
+  }, [reloadDataForWaitersPageAfterCRUDAction]);
 
   return (
     <>

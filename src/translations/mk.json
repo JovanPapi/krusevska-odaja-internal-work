@@ -25,7 +25,6 @@
   "servingTableInfo.text.th.quantity": "Квантитет",
   "servingTableInfo.text.th.price": "Цена",
   "servingTableInfo.text.th.ingredients": "Состојки",
-  "servingTableInfo.text.th.order": "Нарачка",
 
   "servingTableActions.button.text.confirmOrder": "Потврди нарачка",
   "servingTableActions.button.text.openTables": "Отворени маси",
@@ -162,9 +161,6 @@
   "orderPrice.text.tablePrice": "Вкупна цена на масата",
   "orderPrice.text.newOrderPrice": "Цена на новата нарачка",
   "orderPrice.text.denari": "Денари",
-
-  "servingTableInfo.text.td.oldOrder": "Стара нарачка",
-  "servingTableInfo.text.td.newOrder": "Нова нарачка",
 
   "viewWaiterTables.text.noSelectedWaiter": "Немате селектирано келнер за да се прикажат неговите маси",
   "viewWaiterTables.text.waiterNoReservedTables": "Келнерот нема резервирани маси",

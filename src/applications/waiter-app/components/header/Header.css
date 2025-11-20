@@ -76,14 +76,16 @@
   color: #686565;
 }
 
-/* Tooltip dropdown */
+/* Notification for waiter - tooltip dropdown css */
 .header-notification-panel-title-wrapper {
   display: flex;
   flex-direction: column;
   padding: 0.4rem;
   row-gap: 0.6rem;
-  height: 200px;
+  max-height: 200px;
+  min-height: 130px;
   overflow: auto;
+  overflow-x: hidden;
 
   p {
     background-color: white;

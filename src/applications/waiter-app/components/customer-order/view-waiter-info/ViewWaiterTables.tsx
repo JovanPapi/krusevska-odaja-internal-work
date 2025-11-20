@@ -1,5 +1,5 @@
-import { useIntl } from "react-intl";
 import { useApplicationStoreSelector } from "../../../../../store/ApplicationStore";
+import { useIntl } from "react-intl";
 import "./index.css";
 
 /** Functional component used to display all RESERVED tables of the waiter.
@@ -9,10 +9,9 @@ import "./index.css";
 const ViewWaiterTables = () => {
   const intl = useIntl();
 
-  const { selectedWaiter, saveSelectedServingTableByCode } =
-    useApplicationStoreSelector();
+  const { selectedWaiter, saveSelectedServingTableByCode } = useApplicationStoreSelector();
 
-  if (selectedWaiter === undefined)
+  if (selectedWaiter === undefined) {
     return (
       <div className="viewTables-wrapper">
         <p>
@@ -22,6 +21,7 @@ const ViewWaiterTables = () => {
         </p>
       </div>
     );
+  }
 
   const noTablesElement = (
     <li>
@@ -31,8 +31,7 @@ const ViewWaiterTables = () => {
     </li>
   );
 
-  const handleViewSelectedTable = (tableCode: string) =>
-    saveSelectedServingTableByCode(tableCode);
+  const handleViewSelectedTable = (tableCode: string) => saveSelectedServingTableByCode(tableCode);
 
   return (
     <div className="viewTables-wrapper">
@@ -43,14 +42,10 @@ const ViewWaiterTables = () => {
         </span>
       </p>
       <div style={{ paddingLeft: "1rem" }}>
-        {selectedWaiter.listOfServingTables === undefined ||
-        selectedWaiter.listOfServingTables.length === 0
+        {selectedWaiter.listOfServingTables === undefined || selectedWaiter.listOfServingTables.length === 0
           ? noTablesElement
           : selectedWaiter.listOfServingTables!.map((table) => (
-              <li
-                key={table.code}
-                onClick={() => handleViewSelectedTable(String(table.code))}
-              >
+              <li key={table.code} onClick={() => handleViewSelectedTable(String(table.code))}>
                 <span style={{ fontWeight: 600 }}>
                   {intl.formatMessage({
                     id: "viewWaiterTables.text.tableNumber",

@@ -1,15 +1,15 @@
-import { useApplicationStoreSelector } from "../store/ApplicationStore";
+import ServingTable from "../models/ServingTable";
+import Waiter from "../models/Waiter";
 
 /** A function that checks and disables certain fields if neither waiter or serving table is selected.
  * @returns {boolean} Boolean value
  */
-export const validateTableOrderFields = () => {
-  const { selectedWaiter, selectedServingTable } =
-    useApplicationStoreSelector();
-
-  if (selectedWaiter === undefined || selectedServingTable === undefined)
+export const validateTableOrderFields = (selectedWaiter?: Waiter, selectedServingTable?: ServingTable) => {
+  if (selectedWaiter === undefined || selectedServingTable === undefined) {
     return true;
-  else return false;
+  } else {
+    return false;
+  }
 };
 
 /** A function that formats given input of string in to readable date.

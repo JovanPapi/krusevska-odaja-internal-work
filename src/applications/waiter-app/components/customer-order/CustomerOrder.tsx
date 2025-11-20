@@ -1,25 +1,25 @@
-import { Button, Checkbox, Col, Form, InputNumber, Row, Select } from "antd";
-import { useForm } from "antd/es/form/Form";
-import { useEffect, useState, useTransition } from "react";
-import { useIntl } from "react-intl";
+import ServingTableActionsProps from "./serving-table-actions/ServingTableActions";
+import ServingTableInfo from "./serving-table-info/ServingTableInfo";
+import TableTotalPrice from "./serving-table-total-price/TableTotalPrice";
+import ViewWaiterTables from "./view-waiter-info/ViewWaiterTables";
 import Ingredient from "../../../../models/Ingredient";
 import OrderProduct from "../../../../models/OrderProduct";
 import Product from "../../../../models/Product";
 import { useApplicationStoreSelector } from "../../../../store/ApplicationStore";
 import { useLanguageSwitcherSelector } from "../../../../store/language-switcher/LanguageSwitcher";
 import { validateTableOrderFields } from "../../../../utils";
+import { Button, Checkbox, Col, Form, InputNumber, Row, Select } from "antd";
+import { useForm } from "antd/es/form/Form";
+import { useEffect, useState, useTransition } from "react";
+import { useIntl } from "react-intl";
 import "./CustomerOrder.css";
-import ServingTableActions from "./serving-table-actions/ServingTableActions";
-import ServingTableInfo from "./serving-table-info/ServingTableInfo";
-import TableTotalPrice from "./serving-table-total-price/TableTotalPrice";
-import ViewWaiterTables from "./view-waiter-info/ViewWaiterTables";
 
 /** Functional component used to display all neccessary elements to allow a waiter to execute a specific logic (create table, create order, select product etc.). */
 const CustomerOrder = () => {
   const intl = useIntl();
   const { currentLanguage } = useLanguageSwitcherSelector();
 
-  const { originalProducts, saveProductToServingTable } =
+  const { originalProducts, saveProductToServingTable, selectedWaiter, selectedServingTable } =
     useApplicationStoreSelector();
 
   const [productInput, setProductInput] = useState<string>("");
@@ -30,9 +30,7 @@ const CustomerOrder = () => {
 
   const [selectedProduct, setSelectedProduct] = useState<Product>();
 
-  const [selectedProductIngredients, setSelectedProductIngredients] = useState<
-    Ingredient[]
-  >([]);
+  const [selectedProductIngredients, setSelectedProductIngredients] = useState<Ingredient[]>([]);
 
   const [, startTransition] = useTransition();
 
@@ -54,10 +52,8 @@ const CustomerOrder = () => {
 
     startTransition(() =>
       setFilteredProducts(
-        originalProducts.filter((product) =>
-          product.name.toLowerCase().includes(searchValue.toLowerCase())
-        )
-      )
+        originalProducts.filter((product) => product.name.toLowerCase().includes(searchValue.toLowerCase())),
+      ),
     );
   };
 
@@ -81,10 +77,7 @@ const CustomerOrder = () => {
     const tempSelectedProduct = { ...selectedProduct };
 
     if (tempSelectedProduct?.listOfIngredients !== undefined) {
-      if (
-        selectedProductIngredients.length !==
-        selectedProduct?.listOfIngredients.length
-      ) {
+      if (selectedProductIngredients.length !== selectedProduct?.listOfIngredients.length) {
         tempSelectedProduct!.listOfIngredients = selectedProductIngredients;
       }
     }
@@ -101,7 +94,7 @@ const CustomerOrder = () => {
     setSelectedProductIngredients(selectedIngredient);
   };
 
-  const validateFields = validateTableOrderFields();
+  const validateFields = validateTableOrderFields(selectedWaiter, selectedServingTable);
 
   return (
     <div className="customerOrder-wrapper">
@@ -112,8 +105,7 @@ const CustomerOrder = () => {
             flexDirection: "row",
             flexWrap: "wrap",
             columnGap: "3rem",
-          }}
-        >
+          }}>
           <div style={{ flexBasis: "35%" }}>
             <Form.Item<OrderProduct>
               layout="vertical"
@@ -132,30 +124,20 @@ const CustomerOrder = () => {
                     id: "customerOrder.input.validation.product",
                   }),
                 },
-              ]}
-            >
+              ]}>
               <Select
                 disabled={validateFields}
                 showSearch={true}
                 placeholder={intl.formatMessage({
                   id: "customerOrder.input.product.placeholder",
                 })}
-                onSearch={(searchValue) =>
-                  handleSearchProductInput(searchValue)
-                }
+                onSearch={(searchValue) => handleSearchProductInput(searchValue)}
                 onChange={handleProductOptionClick}
                 value={productInput}
-                allowClear={true}
-              >
+                allowClear={true}>
                 {filteredProducts.map((product) => (
-                  <Select.Option
-                    key={product.uuid}
-                    value={JSON.stringify(product)}
-                    style={{ fontSize: "1rem" }}
-                  >
-                    {currentLanguage === "en"
-                      ? product.name
-                      : product.nameTranslated}
+                  <Select.Option key={product.uuid} value={JSON.stringify(product)} style={{ fontSize: "1rem" }}>
+                    {currentLanguage === "en" ? product.name : product.nameTranslated}
                   </Select.Option>
                 ))}
               </Select>
@@ -180,8 +162,7 @@ const CustomerOrder = () => {
                     id: "customerOrder.input.validation.productQuantity",
                   }),
                 },
-              ]}
-            >
+              ]}>
               <InputNumber
                 style={{ width: "100%" }}
                 disabled={validateFields}
@@ -204,14 +185,11 @@ const CustomerOrder = () => {
                     id: "customerOrder.text.productPrice",
                   })}
                 </label>
-              }
-            >
+              }>
               <InputNumber
                 disabled={validateFields}
                 readOnly
-                value={
-                  selectedProduct === undefined ? "" : selectedProduct.price
-                }
+                value={selectedProduct === undefined ? "" : selectedProduct.price}
               />
             </Form.Item>
           </div>
@@ -222,8 +200,7 @@ const CustomerOrder = () => {
               type="primary"
               htmlType="submit"
               form="selectProductForm"
-              style={{ fontSize: "1.1rem" }}
-            >
+              style={{ fontSize: "1.1rem" }}>
               {intl.formatMessage({
                 id: "customerOrder.text.button.confirmproduct",
                 defaultMessage: "Confirm product",
@@ -240,30 +217,19 @@ const CustomerOrder = () => {
               style={{
                 fontSize: "1.1rem",
                 color: "white",
-              }}
-            >
+              }}>
               {intl.formatMessage({
                 id: "customerOrder.input.ingredients.label",
               })}
             </label>
-          }
-        >
-          {selectedProduct !== undefined &&
-          selectedProduct.listOfIngredients.length !== 0 ? (
-            <Checkbox.Group<Ingredient>
-              value={selectedProductIngredients}
-              onChange={handleSelectProductIngredients}
-            >
+          }>
+          {selectedProduct !== undefined && selectedProduct.listOfIngredients.length !== 0 ? (
+            <Checkbox.Group<Ingredient> value={selectedProductIngredients} onChange={handleSelectProductIngredients}>
               <Row gutter={[10, 10]}>
                 {selectedProduct.listOfIngredients.map((ingredient) => (
                   <Col span={12} key={ingredient.uuid}>
-                    <Checkbox
-                      value={ingredient}
-                      style={{ fontSize: "1rem", color: "white" }}
-                    >
-                      {currentLanguage === "en"
-                        ? ingredient.name
-                        : ingredient.nameTranslated}
+                    <Checkbox value={ingredient} style={{ fontSize: "1rem", color: "white" }}>
+                      {currentLanguage === "en" ? ingredient.name : ingredient.nameTranslated}
                     </Checkbox>
                   </Col>
                 ))}
@@ -279,10 +245,9 @@ const CustomerOrder = () => {
           justifyContent: "flex-start",
           columnGap: "5rem",
           marginTop: "5rem",
-        }}
-      >
+        }}>
         <ServingTableInfo />
-        <ServingTableActions setViewTables={setViewTables} />
+        <ServingTableActionsProps setViewTables={setViewTables} />
 
         <ViewWaiterTables />
       </div>

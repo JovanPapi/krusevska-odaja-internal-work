@@ -1,3 +1,8 @@
+import EditServingTable from "./EditServingTable";
+import ViewOrdersModal from "./ViewOrders";
+import { ServingTableDTO } from "../../../../api/dto";
+import RestServices from "../../../../api/services";
+import { ViewOrdersModalState } from "../../../../interfaces";
 import {
   Input,
   Popconfirm,
@@ -8,17 +13,10 @@ import {
   TablePaginationConfig,
   TableProps,
 } from "antd";
-
 import { ChangeEvent, useEffect, useState, useTransition } from "react";
-import { ServingTableDTO } from "../../../../api/dto";
-import RestServices from "../../../../api/services";
-
 import toast from "react-hot-toast";
 import { useIntl } from "react-intl";
-import { ViewOrdersModalState } from "../../../../interfaces";
-import EditServingTable from "./EditServingTable";
 import "./ServingTable.css";
-import ViewOrdersModal from "./ViewOrders";
 
 interface TableParams {
   pagination: TablePaginationConfig;
@@ -30,18 +28,13 @@ interface TableParams {
 const ServingTables = () => {
   const intl = useIntl();
 
-  const [originalServingTables, setOriginalServingTables] = useState<
-    ServingTableDTO[]
-  >([]);
-  const [filteredServingTables, setFilteredServingTables] = useState<
-    ServingTableDTO[]
-  >([]);
+  const [originalServingTables, setOriginalServingTables] = useState<ServingTableDTO[]>([]);
+  const [filteredServingTables, setFilteredServingTables] = useState<ServingTableDTO[]>([]);
   const [isDataLoading, setIsDataLoading] = useState<boolean>();
 
   const [reloadServingTables, setReloadServingTables] = useState<boolean>();
 
-  const [filterServingTableInput, setFilterServingTableInput] =
-    useState<string>("");
+  const [filterServingTableInput, setFilterServingTableInput] = useState<string>("");
 
   const [editModal, setEditModal] = useState<{
     editModalOpen: boolean;
@@ -62,26 +55,23 @@ const ServingTables = () => {
     },
   });
 
-  const [filterByTableStatus, setFilterByTableStatus] = useState<
-    "Reserved" | "Closed"
-  >("Reserved");
+  const [filterByTableStatus, setFilterByTableStatus] = useState<"Reserved" | "Closed">("Reserved");
 
   useEffect(() => {
-    setIsDataLoading(true);
-    RestServices.krusevska_odaja_ServingTableController
-      .fetchServingTables()
-      .then((response) => {
+    const loadData = async () => {
+      setIsDataLoading(true);
+      try {
+        const response = await RestServices.servingTableController.fetchServingTables();
         setOriginalServingTables(response);
-        setFilteredServingTables(
-          response.filter(
-            (stp) => stp.servingTableStatus === filterByTableStatus
-          )
-        );
+        setFilteredServingTables(response.filter((stp) => stp.servingTableStatus === filterByTableStatus));
+      } catch (err) {
+        toast.error(err as string);
+      } finally {
         setIsDataLoading(false);
-      })
-      .catch(() => {
-        setIsDataLoading(false);
-      });
+      }
+    };
+    loadData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [reloadServingTables]);
 
   const columns: TableColumnsType<ServingTableDTO> = [
@@ -134,8 +124,7 @@ const ServingTables = () => {
                 viewOrdersModalOpen: true,
                 selectedServingTable: servingTable,
               })
-            }
-          >
+            }>
             {intl.formatMessage({
               id: "adminPage.servingTable.table.column.actions.button.viewOrders",
             })}
@@ -149,8 +138,7 @@ const ServingTables = () => {
                     editModalOpen: true,
                     selectedServingTable: servingTable,
                   });
-                }}
-              >
+                }}>
                 {intl.formatMessage({ id: "adminPage.button.edit" })}
               </span>
               <Popconfirm
@@ -160,8 +148,7 @@ const ServingTables = () => {
                 onConfirm={() =>
                   //TODO: Implemented, but need to implement entity for non-fiscal checks/payments (не е извадена фискална сметка за затворената маса, црни пари)
                   handleCloseServingTable(servingTable.uuid as string)
-                }
-              >
+                }>
                 <span style={{ color: "blue", cursor: "pointer" }}>
                   {intl.formatMessage({ id: "adminPage.button.close" })}
                 </span>
@@ -170,10 +157,7 @@ const ServingTables = () => {
                 title={intl.formatMessage({
                   id: "adminPage.text.sureToDelete",
                 })}
-                onConfirm={() =>
-                  handleDeleteServingTable(servingTable.uuid as string)
-                }
-              >
+                onConfirm={() => handleDeleteServingTable(servingTable.uuid as string)}>
                 <span style={{ color: "blue", cursor: "pointer" }}>
                   {intl.formatMessage({ id: "adminPage.text.delete" })}
                 </span>
@@ -186,26 +170,20 @@ const ServingTables = () => {
   ];
 
   const handleDeleteServingTable = (servingTableId: string) => {
-    RestServices.krusevska_odaja_ServingTableController
-      .deleteServingTableById(servingTableId)
-      .then((response) => {
-        toast.success(response);
-        setReloadServingTables(!reloadServingTables);
-      });
+    RestServices.servingTableController.deleteServingTableById(servingTableId).then((response) => {
+      toast.success(response);
+      setReloadServingTables(!reloadServingTables);
+    });
   };
 
   const handleCloseServingTable = (servingTableId: string) => {
-    RestServices.krusevska_odaja_ServingTableController
-      .closeServingTableById(servingTableId)
-      .then((response) => {
-        toast.success(response);
-        setReloadServingTables(!reloadServingTables);
-      });
+    RestServices.servingTableController.closeServingTableById(servingTableId).then((response) => {
+      toast.success(response);
+      setReloadServingTables(!reloadServingTables);
+    });
   };
 
-  const handleTableChange: TableProps<ServingTableDTO>["onChange"] = (
-    pagination
-  ) => {
+  const handleTableChange: TableProps<ServingTableDTO>["onChange"] = (pagination) => {
     setTableParams({
       pagination,
     });
@@ -215,13 +193,13 @@ const ServingTables = () => {
     const filterText = event.target.value;
     setFilterServingTableInput(filterText);
 
-    if (filterText === "") setFilteredServingTables(originalServingTables);
+    if (filterText === "") {
+      setFilteredServingTables(originalServingTables);
+    }
 
     startTransition(() => {
       setFilteredServingTables(
-        originalServingTables.filter((stp) =>
-          stp.waiterName?.toLowerCase().includes(filterText.toLowerCase())
-        )
+        originalServingTables.filter((stp) => stp.waiterName?.toLowerCase().includes(filterText.toLowerCase())),
       );
     });
   };
@@ -229,11 +207,7 @@ const ServingTables = () => {
   const handleTableStatusChange = (e: RadioChangeEvent) => {
     setFilterByTableStatus(e.target.value);
     startTransition(() => {
-      setFilteredServingTables(
-        originalServingTables.filter(
-          (stp) => stp.servingTableStatus === e.target.value
-        )
-      );
+      setFilteredServingTables(originalServingTables.filter((stp) => stp.servingTableStatus === e.target.value));
     });
   };
 
@@ -253,8 +227,7 @@ const ServingTables = () => {
           justifyContent: "center",
           columnGap: "1rem",
           marginLeft: "-7rem",
-        }}
-      >
+        }}>
         <p style={{ color: "white", fontSize: "1rem", marginTop: "1.5rem" }}>
           {intl.formatMessage({
             id: "adminPage.servingTable.text.selectStatusOfTable",
@@ -268,8 +241,7 @@ const ServingTables = () => {
             rowGap: "1rem",
           }}
           value={filterByTableStatus}
-          onChange={handleTableStatusChange}
-        >
+          onChange={handleTableStatusChange}>
           <Radio style={{ color: "white", fontSize: "1rem" }} value="Reserved">
             {intl.formatMessage({ id: "adminPage.servingTable.text.reserved" })}
           </Radio>
@@ -293,9 +265,7 @@ const ServingTables = () => {
       {editModal.editModalOpen === true ? (
         <EditServingTable
           editModalOpen={editModal.editModalOpen}
-          selectedServingTable={
-            editModal.selectedServingTable as ServingTableDTO
-          }
+          selectedServingTable={editModal.selectedServingTable as ServingTableDTO}
           setEditModalState={setEditModal}
           setReloadServingTables={setReloadServingTables}
         />

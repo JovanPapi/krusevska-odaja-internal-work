@@ -1,19 +1,16 @@
+import ApplicationStarterLogin from "./application-starter-login/ApplicationStarterLogin";
+import AdministratorApp from "./applications/administration-app/AdministratorApp";
+import KitchenPage from "./applications/kitchen-app/components/KitchenApp";
+import WaiterApp from "./applications/waiter-app/components/WaiterApp";
+import { ActivePageStateProps, AuthorizationModalStateProps } from "./interfaces";
+import ModalAuthorize from "./modal-authorize/ModalAuthorize";
+import { useApplicationStoreSelector } from "./store/ApplicationStore";
+import { useLanguageSwitcherSelector } from "./store/language-switcher/LanguageSwitcher";
 import { Button, Dropdown, Flex, Layout, MenuProps } from "antd";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { useIntl } from "react-intl";
-import AdministratorApp from "./applications/administration-app/AdministratorApp";
-import ApplicationStarterLogin from "./application-starter-login/ApplicationStarterLogin";
-import {
-  ActivePageStateProps,
-  AuthorizationModalStateProps,
-} from "./interfaces";
-import KitchenPage from "./applications/kitchen-app/components/KitchenApp";
 import "./MainApplication.css";
-import { useLanguageSwitcherSelector } from "./store/language-switcher/LanguageSwitcher";
-import ModalAuthorize from "./modal-authorize/ModalAuthorize";
-import WaiterApp from "./applications/waiter-app/components/WaiterApp";
-import { useApplicationStoreSelector } from "./store/ApplicationStore";
 
 const { Sider } = Layout;
 
@@ -24,46 +21,30 @@ const activePageInitialState: ActivePageStateProps = {
 };
 
 const MainApplication = () => {
-  useEffect(() => {
-    const activePage = sessionStorage.getItem("activePage");
-    if (activePage === "admin")
-      setActivePage((prevState) => {
-        return { ...prevState, administrationPage: true };
-      });
-    else if (activePage === "waiter")
-      setActivePage((prevState) => {
-        return { ...prevState, waiterPage: true };
-      });
-    else if (activePage === "kitchen")
-      setActivePage((prevState) => {
-        return { ...prevState, kitchenPage: true };
-      });
-  }, []);
-
+  const [activePage, setActivePage] = useState<ActivePageStateProps>(activePageInitialState);
   const intl = useIntl();
 
   const { handleChangeLanguage } = useLanguageSwitcherSelector();
 
-  const [activePage, setActivePage] = useState<ActivePageStateProps>(
-    activePageInitialState
-  );
-
-  const [authorizeModalState, setAuthorizeModalState] =
-    useState<AuthorizationModalStateProps>({
-      activePage: activePageInitialState,
-      modalOpen: false,
-    });
+  const [authorizeModalState, setAuthorizeModalState] = useState<AuthorizationModalStateProps>({
+    activePage: activePageInitialState,
+    modalOpen: false,
+  });
 
   const { clearStorage } = useApplicationStoreSelector();
+
+  useEffect(() => {
+    const activePage = sessionStorage.getItem("activePage");
+    setActivePage((prevState) => {
+      return { ...prevState, [activePage as string]: true };
+    });
+  }, []);
 
   const changeLanguageMenu: MenuProps["items"] = [
     {
       key: 1,
       label: (
-        <p
-          style={{ width: "100%", margin: 0, padding: "0.5rem" }}
-          onClick={() => handleChangeLanguage("en")}
-        >
+        <p style={{ width: "100%", margin: 0, padding: "0.5rem" }} onClick={() => handleChangeLanguage("en")}>
           {intl.formatMessage({ id: "app.sideMenu.language.switcher.english" })}
         </p>
       ),
@@ -71,10 +52,7 @@ const MainApplication = () => {
     {
       key: 2,
       label: (
-        <p
-          style={{ width: "100%", margin: 0, padding: "0.5rem" }}
-          onClick={() => handleChangeLanguage("mk")}
-        >
+        <p style={{ width: "100%", margin: 0, padding: "0.5rem" }} onClick={() => handleChangeLanguage("mk")}>
           {intl.formatMessage({
             id: "app.sideMenu.language.switcher.macedonian",
           })}
@@ -95,7 +73,7 @@ const MainApplication = () => {
   };
 
   return (
-    <Layout>
+    <Layout style={{ height: "100vh" }}>
       <Sider>
         <Flex vertical gap="1.9rem">
           <Dropdown menu={{ items: changeLanguageMenu }}>
@@ -112,9 +90,7 @@ const MainApplication = () => {
       </Sider>
 
       {JSON.stringify(activePage) === JSON.stringify(activePageInitialState) ? (
-        <ApplicationStarterLogin
-          setAuthorizeModalState={setAuthorizeModalState}
-        />
+        <ApplicationStarterLogin setAuthorizeModalState={setAuthorizeModalState} />
       ) : null}
 
       {activePage.administrationPage === true ? (

@@ -1,14 +1,13 @@
-import { Dispatch, useLayoutEffect, useState } from "react";
-import ReactDOM from "react-dom";
 import { PayTablePriceDTO } from "../../../../../api/dto";
 import RestServices from "../../../../../api/services";
 import Order from "../../../../../models/Order";
 import ServingTable from "../../../../../models/ServingTable";
 import { useApplicationStoreSelector } from "../../../../../store/ApplicationStore";
-
+import { formatStringDate } from "../../../../../utils";
+import React, { Dispatch, useLayoutEffect, useState } from "react";
+import ReactDOM from "react-dom";
 import toast from "react-hot-toast";
 import { IntlShape, useIntl } from "react-intl";
-import { formatStringDate } from "../../../../../utils";
 import "./ChargeTable.css";
 
 interface ChargeTableProps {
@@ -25,11 +24,8 @@ interface ChargeTableProps {
 const ChargeTable = ({ openChargeTableModal, onClose }: ChargeTableProps) => {
   const intl = useIntl();
 
-  const {
-    selectedWaiter,
-    selectedServingTable,
-    reloadDataForWaitersPageAfterCRUDAction,
-  } = useApplicationStoreSelector();
+  const { selectedWaiter, selectedServingTable, reloadDataForWaitersPageAfterCRUDAction } =
+    useApplicationStoreSelector();
 
   const [amountToPayInput, setAmountToPayInput] = useState<string>("0");
 
@@ -46,7 +42,9 @@ const ChargeTable = ({ openChargeTableModal, onClose }: ChargeTableProps) => {
     };
   }, [openChargeTableModal]);
 
-  if (openChargeTableModal === false) return null;
+  if (openChargeTableModal === false) {
+    return null;
+  }
 
   const handlePayTable = () => {
     if (amountToPayInput === "") {
@@ -59,9 +57,7 @@ const ChargeTable = ({ openChargeTableModal, onClose }: ChargeTableProps) => {
       amountToPay > (selectedServingTable?.totalPrice as number) ||
       amountToPay > (selectedServingTable?.remainingBalance as number)
     ) {
-      toast.error(
-        "Amount to pay must not be higher than remaining balance or total amount"
-      );
+      toast.error("Amount to pay must not be higher than remaining balance or total amount");
       return null;
     }
 
@@ -76,32 +72,26 @@ const ChargeTable = ({ openChargeTableModal, onClose }: ChargeTableProps) => {
       amountToPay,
     };
 
-    RestServices.krusevska_odaja_ServingTableController
-      .payTablePrice(payTablePriceDTO)
-      .then((response) => {
-        toast.success(response);
-        reloadDataForWaitersPageAfterCRUDAction();
+    RestServices.servingTableController.payTablePrice(payTablePriceDTO).then((response) => {
+      toast.success(response);
+      reloadDataForWaitersPageAfterCRUDAction();
 
-        onClose();
-      });
+      onClose();
+    });
   };
 
   return ReactDOM.createPortal(
     <div className="chargeTable-wrapper">
       <p className="chargeTable-paragraph-decor">
-        {intl.formatMessage({ id: "chargeTable.text.selectedWaiter" })}{" "}
-        {selectedWaiter?.firstName} {selectedWaiter?.lastName}
+        {intl.formatMessage({ id: "chargeTable.text.selectedWaiter" })} {selectedWaiter?.firstName}{" "}
+        {selectedWaiter?.lastName}
       </p>
       <p style={{ margin: 0 }} className="chargeTable-paragraph-decor">
-        {intl.formatMessage({ id: "chargeTable.text.selectedTableNumber" })}{" "}
-        {selectedServingTable?.code}
+        {intl.formatMessage({ id: "chargeTable.text.selectedTableNumber" })} {selectedServingTable?.code}
       </p>
 
       <div className="chargeTable-tableOrders">
-        <RenderTableOrdersAndProducts
-          listOfOrders={selectedServingTable?.listOfOrders}
-          intl={intl}
-        />
+        <RenderTableOrdersAndProducts listOfOrders={selectedServingTable?.listOfOrders} intl={intl} />
       </div>
 
       <RenderTablePriceDetails
@@ -112,11 +102,7 @@ const ChargeTable = ({ openChargeTableModal, onClose }: ChargeTableProps) => {
       />
 
       <div className="chargeTable-footer-wrapper">
-        <button
-          type="button"
-          onClick={handlePayTable}
-          disabled={parseInt(amountToPayInput) === 0}
-        >
+        <button type="button" onClick={handlePayTable} disabled={parseInt(amountToPayInput) === 0}>
           {intl.formatMessage({ id: "chargeTable.text.payTable" })}
         </button>
         <button type="button" onClick={onClose}>
@@ -124,7 +110,7 @@ const ChargeTable = ({ openChargeTableModal, onClose }: ChargeTableProps) => {
         </button>
       </div>
     </div>,
-    document.getElementById("charge-table-modal") as HTMLElement
+    document.getElementById("charge-table-modal") as HTMLElement,
   );
 };
 
@@ -133,10 +119,7 @@ interface RenderTableOrdersAndProductsProps {
   intl: IntlShape;
 }
 
-const RenderTableOrdersAndProducts = ({
-  listOfOrders,
-  intl,
-}: RenderTableOrdersAndProductsProps) => {
+const RenderTableOrdersAndProducts = ({ listOfOrders, intl }: RenderTableOrdersAndProductsProps) => {
   if (listOfOrders === undefined || listOfOrders.length === 0) {
     return <p>The Table has not orders yet.</p>;
   }
@@ -200,19 +183,13 @@ const RenderTablePriceDetails = ({
       <div className="chargeTable-tablePrice-details-div-divider"></div>
 
       <div>
-        <p>
-          {intl.formatMessage({ id: "chargeTable.text.remainingBalance" })}{" "}
-        </p>
+        <p>{intl.formatMessage({ id: "chargeTable.text.remainingBalance" })} </p>
         <p>{selectedServingTable?.remainingBalance}</p>
       </div>
 
       <div>
         <p>{intl.formatMessage({ id: "chargeTable.text.amountToPay" })} </p>
-        <input
-          type="text"
-          value={amountToPay}
-          onChange={(event) => setAmountToPay(event.target.value)}
-        />
+        <input type="text" value={amountToPay} onChange={(event) => setAmountToPay(event.target.value)} />
       </div>
     </div>
   );

@@ -1,13 +1,13 @@
-import { Popconfirm, Table, TableColumnsType } from "antd";
-import { Dispatch, SetStateAction, useState } from "react";
-import toast from "react-hot-toast";
-import { useIntl } from "react-intl";
+import OrderProducts from "./OrderProducts";
 import { ServingTableDTO } from "../../../../api/dto";
 import RestServices from "../../../../api/services";
 import { ViewOrdersModalState } from "../../../../interfaces";
 import Order from "../../../../models/Order";
 import { formatStringDate } from "../../../../utils";
-import OrderProducts from "./OrderProducts";
+import { Popconfirm, Table, TableColumnsType } from "antd";
+import { Dispatch, SetStateAction, useState } from "react";
+import toast from "react-hot-toast";
+import { useIntl } from "react-intl";
 
 interface OrdersProps {
   selectedServingTable: ServingTableDTO;
@@ -24,20 +24,16 @@ const Orders = ({ selectedServingTable, setViewOrdersModal }: OrdersProps) => {
   const [expandedRowKeys, setExpandedRowKeys] = useState<string[]>([]);
 
   const handleDeleteOrder = async (orderId: string) => {
-    await RestServices.krusevska_odaja_OrderController
-      .deleteOrderFromServingTable(orderId)
-      .then((res) => {
-        toast.success(res);
-        // setReloadServingTable((prev) => (prev === undefined ? false : !prev));
-      });
+    await RestServices.orderController.deleteOrderFromServingTable(orderId).then((res) => {
+      toast.success(res);
+      // setReloadServingTable((prev) => (prev === undefined ? false : !prev));
+    });
 
-    await RestServices.krusevska_odaja_ServingTableController
-      .fetchServingTableById(selectedServingTable.uuid as string)
-      .then((res) => {
-        setViewOrdersModal((prev) => {
-          return { ...prev, selectedServingTable: res };
-        });
+    await RestServices.servingTableController.fetchServingTableById(selectedServingTable.uuid as string).then((res) => {
+      setViewOrdersModal((prev) => {
+        return { ...prev, selectedServingTable: res };
       });
+    });
   };
 
   const handleOnExpandOrder = (expanded: boolean, order: Order) => {
@@ -79,8 +75,7 @@ const Orders = ({ selectedServingTable, setViewOrdersModal }: OrdersProps) => {
                 title={intl.formatMessage({
                   id: "adminPage.text.sureToDelete",
                 })}
-                onConfirm={() => handleDeleteOrder(order.uuid as string)}
-              >
+                onConfirm={() => handleDeleteOrder(order.uuid as string)}>
                 <span style={{ color: "blue", cursor: "pointer" }}>
                   {intl.formatMessage({
                     id: "adminPage.text.delete",

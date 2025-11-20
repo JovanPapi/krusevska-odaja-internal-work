@@ -1,6 +1,7 @@
 .customerOrder-wrapper {
   padding: 2rem;
   margin: auto;
+  height: fit-content;
 }
 
 .customOrder-fields-wrapper {

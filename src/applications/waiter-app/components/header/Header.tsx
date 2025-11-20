@@ -1,11 +1,11 @@
+import RestServices from "../../../../api/services";
+import KitchenOrder from "../../../../models/KitchenOrder";
+import { useApplicationStoreSelector } from "../../../../store/ApplicationStore";
 import { Input, InputNumber, Tooltip } from "antd";
 import { ChangeEvent, useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { IoNotificationsCircleOutline } from "react-icons/io5";
 import { useIntl } from "react-intl";
-import RestServices from "../../../../api/services";
-import KitchenOrder from "../../../../models/KitchenOrder";
-import { useApplicationStoreSelector } from "../../../../store/ApplicationStore";
 import "./Header.css";
 
 /** Functional component used to display element in the header (top) of the screen.
@@ -18,9 +18,7 @@ const Header = () => {
   const [inputFieldsState, setInputFieldsState] = useState({
     tableInput: "",
   });
-  const [listCompletedKitchenOrders, setListCompletedKitchenOrders] = useState<
-    KitchenOrder[]
-  >([]);
+  const [listCompletedKitchenOrders, setListCompletedKitchenOrders] = useState<KitchenOrder[]>([]);
 
   const {
     selectedWaiter,
@@ -31,14 +29,14 @@ const Header = () => {
   } = useApplicationStoreSelector();
 
   useEffect(() => {
-    if (selectedServingTable !== undefined) {
-      setInputFieldsState({ tableInput: String(selectedServingTable.code) });
-    } else setInputFieldsState({ tableInput: "" });
+    setInputFieldsState({
+      tableInput: selectedServingTable === undefined ? "" : String(selectedServingTable.code),
+    });
   }, [selectedServingTable]);
 
   useEffect(() => {
     if (selectedWaiter !== undefined) {
-      RestServices.krusevska_odaja_KitchenOrdersController
+      RestServices.kitchenOrdersController
         .fetchCompletedKitchenOrders(selectedWaiter.uuid as string)
         .then((res) => setListCompletedKitchenOrders(res))
         .catch((error) => toast.error(error));
@@ -47,7 +45,9 @@ const Header = () => {
 
   const handleInputWaiter = (event: ChangeEvent<HTMLInputElement>) => {
     const temp = event.target.value;
-    if (temp === "") setInputFieldsState({ tableInput: "" });
+    if (temp === "") {
+      setInputFieldsState({ tableInput: "" });
+    }
     saveSelectedWaiterByCode(temp);
   };
 
@@ -61,10 +61,8 @@ const Header = () => {
     listCompletedKitchenOrders.map((ko) => {
       return (
         <p>
-          {intl.formatMessage({ id: "header.dropdown.menuItem.text1" })}{" "}
-          {ko.order?.code}{" "}
-          {intl.formatMessage({ id: "header.dropdown.menuItem.text2" })}{" "}
-          {ko.servingTable?.code}{" "}
+          {intl.formatMessage({ id: "header.dropdown.menuItem.text1" })} {ko.order?.code}{" "}
+          {intl.formatMessage({ id: "header.dropdown.menuItem.text2" })} {ko.servingTable?.code}{" "}
           {intl.formatMessage({ id: "header.dropdown.menuItem.text3" })}
         </p>
       );
@@ -78,8 +76,7 @@ const Header = () => {
             margin: 0,
             fontSize: "1.2rem",
             color: "white",
-          }}
-        >
+          }}>
           {intl.formatMessage({
             id: "header.text.waiter",
             defaultMessage: "Waiter",
@@ -100,11 +97,7 @@ const Header = () => {
           readOnly={true}
           width="20vw"
           style={{ fontSize: "1rem" }}
-          value={
-            selectedWaiter === undefined
-              ? ""
-              : `${selectedWaiter.firstName} ${selectedWaiter.lastName}`
-          }
+          value={selectedWaiter === undefined ? "" : `${selectedWaiter.firstName} ${selectedWaiter.lastName}`}
         />
       </div>
 
@@ -115,16 +108,14 @@ const Header = () => {
           display: "flex",
           columnGap: "1rem",
           alignItems: "center",
-        }}
-      >
+        }}>
         <p
           style={{
             margin: 0,
             fontSize: "1.2rem",
             color: "white",
             whiteSpace: "nowrap",
-          }}
-        >
+          }}>
           {intl.formatMessage({
             id: "header.text.tableNumber",
             defaultMessage: "Table number",
@@ -167,16 +158,14 @@ const Header = () => {
           display: "flex",
           columnGap: "1rem",
           alignItems: "center",
-        }}
-      >
+        }}>
         <p
           style={{
             margin: 0,
             fontSize: "1.2rem",
             color: "white",
             whiteSpace: "nowrap",
-          }}
-        >
+          }}>
           {intl.formatMessage({
             id: "header.text.orderNumber",
             defaultMessage: "Order number",
@@ -187,11 +176,7 @@ const Header = () => {
           disabled={selectedWaiter === undefined ? true : false}
           readOnly={true}
           style={{ width: "20%" }}
-          value={
-            selectedServingTable === undefined
-              ? ""
-              : selectedServingTableOrder?.code
-          }
+          value={selectedServingTable === undefined ? "" : selectedServingTableOrder?.code}
         />
       </div>
 
@@ -199,34 +184,21 @@ const Header = () => {
         <div className="header-notification-wrapper">
           <Tooltip
             placement="bottom"
-            title={
-              <div className="header-notification-panel-title-wrapper">
-                {tempCompletedKOs()}
-              </div>
-            }
-          >
+            title={<div className="header-notification-panel-title-wrapper">{tempCompletedKOs()}</div>}>
             <div className="header-notification-icon">
               <IoNotificationsCircleOutline
                 className={
-                  listCompletedKitchenOrders.length > 0
-                    ? "notification-bell-active"
-                    : "notification-bell-inactive"
+                  listCompletedKitchenOrders.length > 0 ? "notification-bell-active" : "notification-bell-inactive"
                 }
               />
               {listCompletedKitchenOrders.length > 0 ? (
-                <span
-                  className="notification-text-active animate-pulse-text"
-                  key={listCompletedKitchenOrders.length}
-                >
+                <span className="notification-text-active animate-pulse-text" key={listCompletedKitchenOrders.length}>
                   {intl.formatMessage({
                     id: "header.notification.panel.waiter.news",
                   })}
                 </span>
               ) : (
-                <span
-                  className="notification-text-inactive animate-pulse-text"
-                  key={listCompletedKitchenOrders.length}
-                >
+                <span className="notification-text-inactive animate-pulse-text" key={listCompletedKitchenOrders.length}>
                   {intl.formatMessage({
                     id: "header.notification.panel.waiter.noNews",
                   })}

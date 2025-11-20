@@ -1,7 +1,7 @@
+import { AdministrationAppActivePage } from "../../../../interfaces";
 import { useState } from "react";
 import { useIntl } from "react-intl";
 import { Link } from "react-router-dom";
-import { AdministrationAppActivePage } from "../../../../interfaces";
 import "./Header.css";
 
 const initialState: AdministrationAppActivePage = {
@@ -24,8 +24,7 @@ const initialStateOfPagesFalse: AdministrationAppActivePage = {
 const Header = () => {
   const intl = useIntl();
 
-  const [activePage, setActivePage] =
-    useState<AdministrationAppActivePage>(initialState);
+  const [activePage, setActivePage] = useState<AdministrationAppActivePage>(initialState);
 
   const clickedLink = (path: string) =>
     setActivePage(() => {
@@ -36,11 +35,8 @@ const Header = () => {
     <div className="header-wrapper-admin">
       <Link
         to="/products"
-        className={
-          activePage.productsPage ? "admin-page-header-link-active" : ""
-        }
-        onClick={() => clickedLink("productsPage")}
-      >
+        className={activePage.productsPage ? "admin-page-header-link-active" : ""}
+        onClick={() => clickedLink("productsPage")}>
         {intl.formatMessage({
           id: "adminPage.header.menuItem.products",
           defaultMessage: "Products",
@@ -48,11 +44,8 @@ const Header = () => {
       </Link>
       <Link
         to="/ingredients"
-        className={
-          activePage.ingredientsPage ? "admin-page-header-link-active" : ""
-        }
-        onClick={() => clickedLink("ingredientsPage")}
-      >
+        className={activePage.ingredientsPage ? "admin-page-header-link-active" : ""}
+        onClick={() => clickedLink("ingredientsPage")}>
         {intl.formatMessage({
           id: "adminPage.header.menuItem.ingredients",
           defaultMessage: "Ingredients",
@@ -60,11 +53,8 @@ const Header = () => {
       </Link>
       <Link
         to="/waiters"
-        className={
-          activePage.waitersPage ? "admin-page-header-link-active" : ""
-        }
-        onClick={() => clickedLink("waitersPage")}
-      >
+        className={activePage.waitersPage ? "admin-page-header-link-active" : ""}
+        onClick={() => clickedLink("waitersPage")}>
         {intl.formatMessage({
           id: "adminPage.header.menuItem.waiters",
           defaultMessage: "Waiters",
@@ -72,11 +62,8 @@ const Header = () => {
       </Link>
       <Link
         to="/serving-tables"
-        className={
-          activePage.servingtablesPage ? "admin-page-header-link-active" : ""
-        }
-        onClick={() => clickedLink("servingtablesPage")}
-      >
+        className={activePage.servingtablesPage ? "admin-page-header-link-active" : ""}
+        onClick={() => clickedLink("servingtablesPage")}>
         {intl.formatMessage({
           id: "adminPage.header.menuItem.servingTables",
           defaultMessage: "Serving tables",
@@ -84,11 +71,8 @@ const Header = () => {
       </Link>
       <Link
         to="/payments"
-        className={
-          activePage.paymentsPage ? "admin-page-header-link-active" : ""
-        }
-        onClick={() => clickedLink("paymentsPage")}
-      >
+        className={activePage.paymentsPage ? "admin-page-header-link-active" : ""}
+        onClick={() => clickedLink("paymentsPage")}>
         {intl.formatMessage({
           id: "adminPage.header.menuItem.payments",
           defaultMessage: "Payments",

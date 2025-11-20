@@ -1,22 +1,13 @@
-import {
-  Button,
-  Input,
-  Popconfirm,
-  Table,
-  TableColumnsType,
-  TablePaginationConfig,
-  TableProps,
-} from "antd";
-
-import { ChangeEvent, useEffect, useState, useTransition } from "react";
-import RestServices from "../../../../api/services";
-import Waiter from "../../../../models/Waiter";
 import CreateWaiter from "./CreateWaiter";
 import EditWaiter from "./EditWaiter";
+import RestServices from "../../../../api/services";
+import Waiter from "../../../../models/Waiter";
+import { Button, Input, Popconfirm, Table, TableColumnsType, TablePaginationConfig, TableProps } from "antd";
+import { ChangeEvent, useEffect, useState, useTransition } from "react";
 import "./Waiters.css";
 
-import { useIntl } from "react-intl";
 import toast from "react-hot-toast";
+import { useIntl } from "react-intl";
 
 interface TableParams {
   pagination: TablePaginationConfig;
@@ -54,18 +45,19 @@ const Waiters = () => {
   });
 
   useEffect(() => {
-    setIsDataLoading(true);
-    RestServices.krusevska_odaja_WaiterController
-      .fetchWaitersForAdminPage()
-      .then((response) => {
+    const loadData = async () => {
+      setIsDataLoading(true);
+      try {
+        const response = await RestServices.waiterController.fetchWaitersForAdminPage();
         setOriginalWaiters(response);
         setFilteredWaiters(response);
+      } catch (err) {
+        toast.error(err as string);
+      } finally {
         setIsDataLoading(false);
-      })
-      .catch((err) => {
-        console.log(err);
-        setIsDataLoading(false);
-      });
+      }
+    };
+    loadData();
   }, [reloadWaiters]);
 
   const columns: TableColumnsType<Waiter> = [
@@ -87,8 +79,7 @@ const Waiters = () => {
             title={intl.formatMessage({
               id: "adminPage.text.sureToDelete",
             })}
-            onConfirm={() => handleDeleteWaiter(waiter.uuid as string)}
-          >
+            onConfirm={() => handleDeleteWaiter(waiter.uuid as string)}>
             <span style={{ color: "blue", cursor: "pointer" }}>
               {intl.formatMessage({
                 id: "adminPage.text.delete",
@@ -102,8 +93,7 @@ const Waiters = () => {
                 editModalOpen: true,
                 selectedWaiter: waiter,
               });
-            }}
-          >
+            }}>
             {intl.formatMessage({
               id: "adminPage.text.edit",
             })}
@@ -114,12 +104,10 @@ const Waiters = () => {
   ];
 
   const handleDeleteWaiter = (waiterId: string) => {
-    RestServices.krusevska_odaja_WaiterController
-      .deleteWaiterById(waiterId)
-      .then((response) => {
-        toast.success(response);
-        setReloadWaiters(!reloadWaiters);
-      });
+    RestServices.waiterController.deleteWaiterById(waiterId).then((response) => {
+      toast.success(response);
+      setReloadWaiters(!reloadWaiters);
+    });
   };
 
   const handleTableChange: TableProps<Waiter>["onChange"] = (pagination) => {
@@ -132,24 +120,24 @@ const Waiters = () => {
     const filterText = event.target.value;
     setFilterWaitersInput(filterText);
 
-    if (filterText === "") setFilteredWaiters(originalWaiters);
+    if (filterText === "") {
+      setFilteredWaiters(originalWaiters);
+    }
 
     startTransition(() => {
       setFilteredWaiters(
         originalWaiters.filter(
           (p) =>
             p.firstName?.toLowerCase().includes(filterText.toLowerCase()) ||
-            p.lastName?.toLowerCase().includes(filterText.toLowerCase())
-        )
+            p.lastName?.toLowerCase().includes(filterText.toLowerCase()),
+        ),
       );
     });
   };
 
   return (
     <div className="waiters-wrapper">
-      <h2 style={{ color: "white" }}>
-        {intl.formatMessage({ id: "adminPage.waiters.text.filterWaiters" })}
-      </h2>
+      <h2 style={{ color: "white" }}>{intl.formatMessage({ id: "adminPage.waiters.text.filterWaiters" })}</h2>
       <Input onChange={handleInputChange} value={filterWaitersInput} />
       <br />
       <div style={{ textAlign: "end" }}>

@@ -1,14 +1,9 @@
-import {
-  Input,
-  Table,
-  TableColumnsType,
-  TablePaginationConfig,
-  TableProps,
-} from "antd";
-import { ChangeEvent, useEffect, useState, useTransition } from "react";
-import "./Payments.css";
 import { PaymentDTO } from "../../../../api/dto";
 import RestServices from "../../../../api/services";
+import { Input, Table, TableColumnsType, TablePaginationConfig, TableProps } from "antd";
+import { ChangeEvent, useEffect, useState, useTransition } from "react";
+import "./Payments.css";
+import toast from "react-hot-toast";
 import { useIntl } from "react-intl";
 
 interface TableParams {
@@ -35,18 +30,19 @@ const Payment = () => {
   });
 
   useEffect(() => {
-    setIsDataLoading(true);
-    RestServices.krusevska_odaja_Paymnets
-      .fetchPayments()
-      .then((response) => {
+    const loadData = async () => {
+      setIsDataLoading(true);
+      try {
+        const response = await RestServices.paymnetsController.fetchPayments();
         setOriginalPayments(response);
         setFilteredPayments(response);
+      } catch {
+        toast.error("There was an error while fetching payments.");
+      } finally {
         setIsDataLoading(false);
-      })
-      .catch((err) => {
-        console.log(err);
-        setIsDataLoading(false);
-      });
+      }
+    };
+    loadData();
   }, []);
 
   const columns: TableColumnsType<PaymentDTO> = [
@@ -86,22 +82,20 @@ const Payment = () => {
     const filterText = event.target.value;
     setFilterPaymentsInput(filterText);
 
-    if (filterText === "") setFilteredPayments(originalPayments);
+    if (filterText === "") {
+      setFilteredPayments(originalPayments);
+    }
 
     startTransition(() => {
       setFilteredPayments(
-        originalPayments.filter((p) =>
-          p.waiterName?.toLowerCase().includes(filterText.toLowerCase())
-        )
+        originalPayments.filter((p) => p.waiterName?.toLowerCase().includes(filterText.toLowerCase())),
       );
     });
   };
 
   return (
     <div className="waiters-wrapper">
-      <h2 style={{ color: "white" }}>
-        {intl.formatMessage({ id: "adminPage.payments.text.filterPayments" })}
-      </h2>
+      <h2 style={{ color: "white" }}>{intl.formatMessage({ id: "adminPage.payments.text.filterPayments" })}</h2>
       <Input onChange={handleInputChange} value={filterPaymentsInput} />
       <div style={{ marginTop: "1.5rem" }}>
         <Table<PaymentDTO>

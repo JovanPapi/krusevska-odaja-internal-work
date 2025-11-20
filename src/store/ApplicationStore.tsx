@@ -1,16 +1,10 @@
-import {
-  createContext,
-  ReactNode,
-  useContext,
-  useEffect,
-  useState,
-  useTransition,
-} from "react";
 import RestServices from "../api/services";
 import Order from "../models/Order";
 import Product from "../models/Product";
 import ServingTable from "../models/ServingTable";
 import Waiter from "../models/Waiter";
+import { createContext, ReactNode, useCallback, useContext, useEffect, useState } from "react";
+import toast from "react-hot-toast";
 
 interface ApplicationStoreProps {
   originalWaiters: Waiter[];
@@ -43,8 +37,7 @@ const initialState: ApplicationStoreProps = {
 };
 
 /** Function that creates the context, storing information (global state) that can be used across all components. */
-export const ApplicationStore =
-  createContext<ApplicationStoreProps>(initialState);
+export const ApplicationStore = createContext<ApplicationStoreProps>(initialState);
 
 /** Function that returns the Context of ApplicationStore.tsx. */
 export const useApplicationStoreSelector = () => useContext(ApplicationStore);
@@ -59,19 +52,18 @@ function ApplicationStoreProvider({ children }: { children: ReactNode }) {
   const [originalProducts, setOriginalProducts] = useState<Product[]>([]);
 
   const [selectedWaiter, setSelectedWaiter] = useState<Waiter>();
-  const [selectedServingTable, setSelectedServingTable] =
-    useState<ServingTable>();
-  const [selectedServingTableOrder, setSelectedServingTableOrder] =
-    useState<Order>();
+  const [selectedServingTable, setSelectedServingTable] = useState<ServingTable>();
+  const [selectedServingTableOrder, setSelectedServingTableOrder] = useState<Order>();
 
   const [isDataLoading, setIsDataLoading] = useState<boolean>(true);
 
   const [reloadData, setReloadData] = useState<boolean>();
-  const [, startTransition] = useTransition();
 
   useEffect(() => {
     const adminToken = sessionStorage.getItem("adminToken");
-    if (adminToken !== null) setReloadData(true);
+    if (adminToken !== null) {
+      setReloadData(true);
+    }
   }, []);
 
   // TODO: This can be changed. We can call waiters and products inside waiter application when its main component will render.
@@ -79,57 +71,55 @@ function ApplicationStoreProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     if (reloadData === undefined) {
       return;
-    } else {
-      setIsDataLoading(true);
-
-      startTransition(() => {
-        RestServices.krusevska_odaja_ProductController
-          .fetchProducts()
-          .then((res) => {
-            setOriginalProducts(res);
-            setIsDataLoading(false);
-          })
-          .catch(() => {
-            setIsDataLoading(false);
-          });
-      });
     }
+    const loadData = async () => {
+      setIsDataLoading(true);
+      try {
+        const products = await RestServices.productController.fetchProducts();
+        setOriginalProducts(products);
+      } catch {
+        toast.error("Error fetching products data.");
+      } finally {
+        setIsDataLoading(false);
+      }
+    };
+    loadData();
   }, [reloadData]);
+
+  const refreshSelectedWaiterAfterChargingTable = useCallback(
+    (originalWaiters: Waiter[]) => {
+      if (selectedWaiter === undefined) {
+        return;
+      }
+
+      const updatedWaiter = originalWaiters.find((waiter) => waiter.code === selectedWaiter?.code);
+
+      setSelectedWaiter(updatedWaiter as Waiter);
+      setSelectedServingTable(undefined);
+      setSelectedServingTableOrder(undefined);
+    },
+    [selectedWaiter],
+  );
 
   useEffect(() => {
     if (reloadData === undefined) {
       return;
-    } else {
-      setIsDataLoading(true);
-
-      startTransition(() => {
-        RestServices.krusevska_odaja_WaiterController
-          .fetchWaitersForWaiterPage()
-          .then((res) => {
-            setOriginalWaiters(res);
-            refreshSelectedWaiterAfterChargingTable(res);
-            setIsDataLoading(false);
-          })
-          .catch(() => {
-            setIsDataLoading(false);
-          });
-      });
     }
-  }, [reloadData]);
 
-  const refreshSelectedWaiterAfterChargingTable = (
-    originalWaiters: Waiter[]
-  ) => {
-    if (selectedWaiter === undefined) return;
-
-    const updatedWaiter = originalWaiters.find(
-      (waiter) => waiter.code === selectedWaiter?.code
-    );
-
-    setSelectedWaiter(updatedWaiter as Waiter);
-    setSelectedServingTable(undefined);
-    setSelectedServingTableOrder(undefined);
-  };
+    const loadData = async () => {
+      setIsDataLoading(true);
+      try {
+        const waiters = await RestServices.waiterController.fetchWaitersForWaiterPage();
+        setOriginalWaiters(waiters);
+        refreshSelectedWaiterAfterChargingTable(waiters);
+      } catch {
+        toast.error("Error fetching waiters data.");
+      } finally {
+        setIsDataLoading(false);
+      }
+    };
+    loadData();
+  }, [reloadData, refreshSelectedWaiterAfterChargingTable]);
 
   /** A function that selected waiter from original waiters list by code */
   const saveSelectedWaiterByCode = (waiterCode: string) => {
@@ -142,9 +132,7 @@ function ApplicationStoreProvider({ children }: { children: ReactNode }) {
 
     const parsedWaiterCode = parseInt(waiterCode);
 
-    setSelectedWaiter(
-      originalWaiters.find((waiter) => waiter.code === parsedWaiterCode)
-    );
+    setSelectedWaiter(originalWaiters.find((waiter) => waiter.code === parsedWaiterCode));
 
     setSelectedServingTable(undefined);
   };
@@ -157,9 +145,7 @@ function ApplicationStoreProvider({ children }: { children: ReactNode }) {
     }
 
     const parsedTableCode = parseInt(tableCode);
-    const checkTable = selectedWaiter?.listOfServingTables?.find(
-      (table) => table?.code === parsedTableCode
-    );
+    const checkTable = selectedWaiter?.listOfServingTables?.find((table) => table?.code === parsedTableCode);
 
     const newOrder: Order = {
       code: undefined,
@@ -187,13 +173,11 @@ function ApplicationStoreProvider({ children }: { children: ReactNode }) {
   };
 
   const saveSelectedServingTableOrderByCode = (orderCode: number) => {
-    if (orderCode === undefined) return null;
+    if (orderCode === undefined) {
+      return null;
+    }
 
-    setSelectedServingTableOrder(
-      selectedServingTable?.listOfOrders?.find(
-        (order) => order.code === orderCode
-      )
-    );
+    setSelectedServingTableOrder(selectedServingTable?.listOfOrders?.find((order) => order.code === orderCode));
   };
 
   const saveProductToServingTable = (product: Product, quantity: number) => {
@@ -207,8 +191,7 @@ function ApplicationStoreProvider({ children }: { children: ReactNode }) {
     setSelectedServingTableOrder({ ...tempOrder });
   };
 
-  const reloadDataForWaitersPageAfterCRUDAction = () =>
-    setReloadData(!reloadData);
+  const reloadDataForWaitersPageAfterCRUDAction = () => setReloadData(!reloadData);
 
   const clearStorage = () => {
     setOriginalProducts([]);
@@ -234,8 +217,7 @@ function ApplicationStoreProvider({ children }: { children: ReactNode }) {
         saveProductToServingTable,
         reloadDataForWaitersPageAfterCRUDAction,
         clearStorage,
-      }}
-    >
+      }}>
       {children}
     </ApplicationStore.Provider>
   );

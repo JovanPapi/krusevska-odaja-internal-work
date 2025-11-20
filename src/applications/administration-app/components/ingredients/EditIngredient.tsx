@@ -1,17 +1,15 @@
-import { Button, Form, Input, Modal } from "antd";
-import { Dispatch, SetStateAction } from "react";
-import { useIntl } from "react-intl";
 import RestServices from "../../../../api/services";
 import Ingredient from "../../../../models/Ingredient";
+import { Button, Form, Input, Modal } from "antd";
+import { Dispatch, SetStateAction } from "react";
 import toast from "react-hot-toast";
+import { useIntl } from "react-intl";
 
 interface EditIngredientProps {
   selectedIngredient: Ingredient;
   editModalOpen: boolean;
   setReloadIngredient: Dispatch<SetStateAction<boolean | undefined>>;
-  setEditModalState: Dispatch<
-    SetStateAction<{ editModalOpen: boolean; selectedIngredient?: Ingredient }>
-  >;
+  setEditModalState: Dispatch<SetStateAction<{ editModalOpen: boolean; selectedIngredient?: Ingredient }>>;
 }
 
 /** Functional component responsible for editing a selecting ingredient.
@@ -30,30 +28,26 @@ const EditIngredient = ({
 
   const [form] = Form.useForm();
 
-  const handleCloseModal = () =>
-    setEditModalState({ editModalOpen: false, selectedIngredient: undefined });
+  const handleCloseModal = () => setEditModalState({ editModalOpen: false, selectedIngredient: undefined });
 
   const handleEditIngredient = (updatedIngredient: Ingredient) => {
     form.validateFields();
 
     updatedIngredient.uuid = selectedIngredient.uuid;
 
-    RestServices.krusevska_odaja_IngredientController
-      .updateIngredient(updatedIngredient)
-      .then((res) => {
-        toast.success(res);
-        setEditModalState({
-          editModalOpen: false,
-          selectedIngredient: undefined,
-        });
-        setReloadIngredient((prevValue) => !prevValue);
+    RestServices.ingredientController.updateIngredient(updatedIngredient).then((res) => {
+      toast.success(res);
+      setEditModalState({
+        editModalOpen: false,
+        selectedIngredient: undefined,
       });
+      setReloadIngredient((prevValue) => !prevValue);
+    });
   };
 
   const modalTitle = (
     <p>
-      {intl.formatMessage({ id: "adminPage.editIngredient.text.title" })}{" "}
-      <b>{selectedIngredient.name}</b>
+      {intl.formatMessage({ id: "adminPage.editIngredient.text.title" })} <b>{selectedIngredient.name}</b>
     </p>
   );
 
@@ -69,15 +63,13 @@ const EditIngredient = ({
         <Button key="submit" htmlType="submit" type="primary" form="editForm">
           {intl.formatMessage({ id: "adminPage.button.edit" })}
         </Button>,
-      ]}
-    >
+      ]}>
       <Form<Ingredient>
         id="editForm"
         labelCol={{ span: 8 }}
         form={form}
         onFinish={handleEditIngredient}
-        layout="vertical"
-      >
+        layout="vertical">
         <Form.Item<Ingredient>
           label={intl.formatMessage({
             id: "adminPage.editIngredient.form.label.name",
@@ -94,13 +86,8 @@ const EditIngredient = ({
                 id: "adminPage.editIngredient.input.name.validation",
               }),
             },
-          ]}
-        >
-          <Input
-            style={{ width: "65%" }}
-            pattern="[A-Za-z\s]*"
-            placeholder="Onion.."
-          />
+          ]}>
+          <Input style={{ width: "65%" }} pattern="[A-Za-z\s]*" placeholder="Onion.." />
         </Form.Item>
 
         <Form.Item<Ingredient>
@@ -119,8 +106,7 @@ const EditIngredient = ({
                 id: "adminPage.editIngredient.input.name.validation",
               }),
             },
-          ]}
-        >
+          ]}>
           <Input style={{ width: "65%" }} placeholder="Кромид.." />
         </Form.Item>
       </Form>

@@ -1,10 +1,9 @@
-import { Button, Modal } from "antd";
-
-import { Dispatch, SetStateAction } from "react";
-import { useIntl } from "react-intl";
 import { ServingTableDTO } from "../../../../api/dto";
 import { ViewOrdersModalState } from "../../../../interfaces";
 import Orders from "../orders/Orders";
+import { Button, Modal } from "antd";
+import { Dispatch, SetStateAction } from "react";
+import { useIntl } from "react-intl";
 
 interface ViewOrdersProps {
   viewOrdersModal: ViewOrdersModalState;
@@ -18,11 +17,7 @@ interface ViewOrdersProps {
  * @param {Dispatch} setReloadServingTables Dispatch function that refreshes the list of serving table inside ServingTable.tsx component
  *  upon deleting orders or specific products from selected order.
  */
-const ViewOrdersModal = ({
-  viewOrdersModal,
-  setViewOrdersModal,
-  setReloadServingTables,
-}: ViewOrdersProps) => {
+const ViewOrdersModal = ({ viewOrdersModal, setViewOrdersModal, setReloadServingTables }: ViewOrdersProps) => {
   const intl = useIntl();
 
   const handleCloseModal = () => {
@@ -56,9 +51,7 @@ const ViewOrdersModal = ({
         {viewOrdersModal.selectedServingTable?.servingTableStatus}
       </p>
       <p>
-        <b>
-          {intl.formatMessage({ id: "adminPage.viewOrders.title.totalPrice" })}
-        </b>{" "}
+        <b>{intl.formatMessage({ id: "adminPage.viewOrders.title.totalPrice" })}</b>{" "}
         {viewOrdersModal.selectedServingTable?.totalPrice}
       </p>
       <p>
@@ -81,12 +74,9 @@ const ViewOrdersModal = ({
         <Button key="back" onClick={handleCloseModal}>
           {intl.formatMessage({ id: "adminPage.button.close" })}
         </Button>,
-      ]}
-    >
+      ]}>
       <Orders
-        selectedServingTable={
-          viewOrdersModal.selectedServingTable as ServingTableDTO
-        }
+        selectedServingTable={viewOrdersModal.selectedServingTable as ServingTableDTO}
         setViewOrdersModal={setViewOrdersModal}
       />
     </Modal>

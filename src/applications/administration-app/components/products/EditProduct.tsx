@@ -1,21 +1,17 @@
+import RestServices from "../../../../api/services";
+import Product from "../../../../models/Product";
+import { productCategoryStringArray } from "../../constants";
 import { Button, Form, Input, InputNumber, Modal, Select } from "antd";
 import TextArea from "antd/es/input/TextArea";
-
 import { Dispatch, SetStateAction } from "react";
-import { productCategoryStringArray } from "../../constants";
-import Product from "../../../../models/Product";
-import RestServices from "../../../../api/services";
-
-import { useIntl } from "react-intl";
 import toast from "react-hot-toast";
+import { useIntl } from "react-intl";
 
 interface EditProductProps {
   selectedProduct: Product;
   editModalOpen: boolean;
   setReloadProducts: Dispatch<SetStateAction<boolean | undefined>>;
-  setEditModalState: Dispatch<
-    SetStateAction<{ editModalOpen: boolean; selectedProduct?: Product }>
-  >;
+  setEditModalState: Dispatch<SetStateAction<{ editModalOpen: boolean; selectedProduct?: Product }>>;
 }
 
 /** Functional component used for updating a selected product.
@@ -24,18 +20,12 @@ interface EditProductProps {
  * @param {Dispatch} setReloadProducts Dispatch function that refreshes the list of products inside Products.tsx upon updating selected product.
  * @param {Dispatch} setEditModalState Dispatch function that updates the local state of Products.tsx.
  */
-const EditProduct = ({
-  selectedProduct,
-  editModalOpen,
-  setEditModalState,
-  setReloadProducts,
-}: EditProductProps) => {
+const EditProduct = ({ selectedProduct, editModalOpen, setEditModalState, setReloadProducts }: EditProductProps) => {
   const intl = useIntl();
 
   const [form] = Form.useForm();
 
-  const handleCloseModal = () =>
-    setEditModalState({ editModalOpen: false, selectedProduct: undefined });
+  const handleCloseModal = () => setEditModalState({ editModalOpen: false, selectedProduct: undefined });
 
   const handleEditProduct = (updatedProduct: Product) => {
     form.validateFields();
@@ -46,19 +36,16 @@ const EditProduct = ({
     updatedProduct.uuid = selectedProduct.uuid;
     updatedProduct.listOfIngredients = selectedProduct.listOfIngredients;
 
-    RestServices.krusevska_odaja_ProductController
-      .updateProduct(updatedProduct)
-      .then((res) => {
-        toast.success(res);
-        setEditModalState({ editModalOpen: false, selectedProduct: undefined });
-        setReloadProducts((prevValue) => !prevValue);
-      });
+    RestServices.productController.updateProduct(updatedProduct).then((res) => {
+      toast.success(res);
+      setEditModalState({ editModalOpen: false, selectedProduct: undefined });
+      setReloadProducts((prevValue) => !prevValue);
+    });
   };
 
   const modalTitle = (
     <p>
-      {intl.formatMessage({ id: "adminPage.editProduct.title.text" })}{" "}
-      {selectedProduct.name}
+      {intl.formatMessage({ id: "adminPage.editProduct.title.text" })} {selectedProduct.name}
     </p>
   );
 
@@ -74,15 +61,8 @@ const EditProduct = ({
         <Button key="submit" htmlType="submit" type="primary" form="editForm">
           {intl.formatMessage({ id: "adminPage.button.edit" })}
         </Button>,
-      ]}
-    >
-      <Form<Product>
-        id="editForm"
-        labelCol={{ span: 8 }}
-        form={form}
-        onFinish={handleEditProduct}
-        layout="vertical"
-      >
+      ]}>
+      <Form<Product> id="editForm" labelCol={{ span: 8 }} form={form} onFinish={handleEditProduct} layout="vertical">
         <Form.Item<Product>
           label={intl.formatMessage({
             id: "adminPage.editProduct.form.label.name",
@@ -99,13 +79,8 @@ const EditProduct = ({
                 id: "adminPage.editProduct.input.name.validation",
               }),
             },
-          ]}
-        >
-          <Input
-            style={{ width: "75%" }}
-            pattern="[A-Za-z\s]*"
-            placeholder="White wine.."
-          />
+          ]}>
+          <Input style={{ width: "75%" }} pattern="[A-Za-z\s]*" placeholder="White wine.." />
         </Form.Item>
 
         <Form.Item<Product>
@@ -124,8 +99,7 @@ const EditProduct = ({
                 id: "adminPage.editProduct.input.name.validation",
               }),
             },
-          ]}
-        >
+          ]}>
           <Input style={{ width: "75%" }} placeholder="Бело вино.." />
         </Form.Item>
 
@@ -145,14 +119,8 @@ const EditProduct = ({
                 id: "adminPage.editProduct.input.price.validation",
               }),
             },
-          ]}
-        >
-          <InputNumber
-            style={{ width: "75%" }}
-            min={0}
-            max={10000}
-            placeholder="90"
-          />
+          ]}>
+          <InputNumber style={{ width: "75%" }} min={0} max={10000} placeholder="90" />
         </Form.Item>
 
         <Form.Item<Product>
@@ -161,8 +129,7 @@ const EditProduct = ({
           })}
           name="description"
           initialValue={selectedProduct.description}
-          rules={[{ required: false }]}
-        >
+          rules={[{ required: false }]}>
           <TextArea style={{ width: "75%", textAlign: "center" }} />
         </Form.Item>
 
@@ -182,12 +149,8 @@ const EditProduct = ({
                 id: "adminPage.editProduct.input.category.validation",
               }),
             },
-          ]}
-        >
-          <Select
-            style={{ width: "75%" }}
-            options={productCategoryStringArray}
-          />
+          ]}>
+          <Select style={{ width: "75%" }} options={productCategoryStringArray} />
         </Form.Item>
       </Form>
     </Modal>

@@ -1,6 +1,6 @@
-import { ReactNode } from "react";
-import LanguageSwitcherProvider from "./language-switcher/LanguageSwitcher";
 import ApplicationStoreProvider from "./ApplicationStore";
+import LanguageSwitcherProvider from "./language-switcher/LanguageSwitcher";
+import { ReactNode } from "react";
 
 /** Wrapper component for providers.
  * @param {ReactNode} children Presents everything that is rendered, all components, wrapped in providers to use states and functions on global level.

@@ -1,34 +1,32 @@
-import { useIntl } from "react-intl";
 import { useApplicationStoreSelector } from "../../../../../store/ApplicationStore";
 import { formatStringDate } from "../../../../../utils";
+import { useIntl } from "react-intl";
 import "./index.css";
 
 /** Functional component used to display all orders of selected table. */
 const ViewTableOrders = () => {
   const intl = useIntl();
 
-  const { selectedServingTable, saveSelectedServingTableOrderByCode } =
-    useApplicationStoreSelector();
+  const { selectedServingTable, saveSelectedServingTableOrderByCode } = useApplicationStoreSelector();
 
-  if (selectedServingTable === undefined) return null;
+  if (selectedServingTable === undefined) {
+    return null;
+  }
 
-  if (selectedServingTable.listOfOrders?.length === 0)
+  if (selectedServingTable.listOfOrders?.length === 0) {
     return (
       <div className="viewTables-wrapper">
-        <p>
-          {intl.formatMessage({ id: "viewTableOrders.text.tableHasNoOrders" })}
-        </p>
+        <p>{intl.formatMessage({ id: "viewTableOrders.text.tableHasNoOrders" })}</p>
       </div>
     );
+  }
 
-  const handleViewSelectOrder = (orderCode: number) =>
-    saveSelectedServingTableOrderByCode(orderCode);
+  const handleViewSelectOrder = (orderCode: number) => saveSelectedServingTableOrderByCode(orderCode);
 
   return (
     <div className="viewTables-wrapper">
       <p style={{ fontWeight: 600 }}>
-        {intl.formatMessage({ id: "viewTableOrders.text.selectedTableNumber" })}{" "}
-        {selectedServingTable?.code}
+        {intl.formatMessage({ id: "viewTableOrders.text.selectedTableNumber" })} {selectedServingTable?.code}
       </p>
       <div style={{ paddingLeft: "1rem" }}>
         <table className="viewTables-orders-table">
@@ -51,8 +49,7 @@ const ViewTableOrders = () => {
               <tr
                 key={order.code}
                 onClick={() => handleViewSelectOrder(order.code as number)}
-                style={{ textAlign: "center" }}
-              >
+                style={{ textAlign: "center" }}>
                 <td>
                   <span>{order.code}</span>
                 </td>

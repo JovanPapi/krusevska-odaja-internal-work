@@ -1,21 +1,12 @@
-import {
-  Button,
-  Input,
-  Popconfirm,
-  Table,
-  TableColumnsType,
-  TablePaginationConfig,
-  TableProps,
-} from "antd";
-
-import { ChangeEvent, useEffect, useState, useTransition } from "react";
-import toast from "react-hot-toast";
-import { useIntl } from "react-intl";
+import CreateIngredient from "./CreateIngredient";
+import EditIngredient from "./EditIngredient";
 import RestServices from "../../../../api/services";
 import Ingredient from "../../../../models/Ingredient";
 import { useLanguageSwitcherSelector } from "../../../../store/language-switcher/LanguageSwitcher";
-import CreateIngredient from "./CreateIngredient";
-import EditIngredient from "./EditIngredient";
+import { Button, Input, Popconfirm, Table, TableColumnsType, TablePaginationConfig, TableProps } from "antd";
+import { ChangeEvent, useEffect, useState, useTransition } from "react";
+import toast from "react-hot-toast";
+import { useIntl } from "react-intl";
 import "./Ingredients.css";
 
 interface TableParams {
@@ -27,18 +18,13 @@ const Ingredients = () => {
   const intl = useIntl();
   const { currentLanguage } = useLanguageSwitcherSelector();
 
-  const [originalIngredients, setOriginalIngredients] = useState<Ingredient[]>(
-    []
-  );
-  const [filteredIngredients, setFilteredIngredients] = useState<Ingredient[]>(
-    []
-  );
+  const [originalIngredients, setOriginalIngredients] = useState<Ingredient[]>([]);
+  const [filteredIngredients, setFilteredIngredients] = useState<Ingredient[]>([]);
   const [isDataLoading, setIsDataLoading] = useState<boolean>();
 
   const [reloadIngredients, setReloadIngredients] = useState<boolean>();
 
-  const [filterIngredientsInput, setFilterIngredientsInput] =
-    useState<string>("");
+  const [filterIngredientsInput, setFilterIngredientsInput] = useState<string>("");
 
   const [editModalState, setEditModalState] = useState<{
     editModalOpen: boolean;
@@ -57,18 +43,22 @@ const Ingredients = () => {
   });
 
   useEffect(() => {
-    setIsDataLoading(true);
-    RestServices.krusevska_odaja_IngredientController
-      .fetchIngredients()
-      .then((response) => {
+    const loadData = async () => {
+      setIsDataLoading(true);
+
+      try {
+        const response = await RestServices.ingredientController.fetchIngredients();
         setOriginalIngredients(response);
         setFilteredIngredients(response);
         setIsDataLoading(false);
-      })
-      .catch((err) => {
-        toast.success(err);
+      } catch (err) {
+        toast.error(err as string);
+      } finally {
         setIsDataLoading(false);
-      });
+      }
+    };
+
+    loadData();
   }, [reloadIngredients]);
 
   const columns: TableColumnsType<Ingredient> = [
@@ -76,8 +66,7 @@ const Ingredients = () => {
       title: intl.formatMessage({
         id: "adminPage.ingredients.table.column.name",
       }),
-      render: (_, ing) =>
-        currentLanguage === "en" ? ing.name : ing.nameTranslated,
+      render: (_, ing) => (currentLanguage === "en" ? ing.name : ing.nameTranslated),
     },
     {
       title: intl.formatMessage({
@@ -89,8 +78,7 @@ const Ingredients = () => {
             title={intl.formatMessage({
               id: "adminPage.text.sureToDelete",
             })}
-            onConfirm={() => handleDeleteIngredient(ingredient.uuid as string)}
-          >
+            onConfirm={() => handleDeleteIngredient(ingredient.uuid as string)}>
             <span style={{ color: "blue", cursor: "pointer" }}>
               {intl.formatMessage({
                 id: "adminPage.text.delete",
@@ -104,8 +92,7 @@ const Ingredients = () => {
                 editModalOpen: true,
                 selectedIngredient: ingredient,
               });
-            }}
-          >
+            }}>
             {intl.formatMessage({
               id: "adminPage.button.edit",
             })}
@@ -116,17 +103,13 @@ const Ingredients = () => {
   ];
 
   const handleDeleteIngredient = (ingredientId: string) => {
-    RestServices.krusevska_odaja_IngredientController
-      .deleteIngredientById(ingredientId)
-      .then((response) => {
-        toast.success(response);
-        setReloadIngredients(!reloadIngredients);
-      });
+    RestServices.ingredientController.deleteIngredientById(ingredientId).then((response) => {
+      toast.success(response);
+      setReloadIngredients(!reloadIngredients);
+    });
   };
 
-  const handleTableChange: TableProps<Ingredient>["onChange"] = (
-    pagination
-  ) => {
+  const handleTableChange: TableProps<Ingredient>["onChange"] = (pagination) => {
     setTableParams({
       pagination,
     });
@@ -136,15 +119,17 @@ const Ingredients = () => {
     const filterText = event.target.value;
     setFilterIngredientsInput(filterText);
 
-    if (filterText === "") setFilteredIngredients(originalIngredients);
+    if (filterText === "") {
+      setFilteredIngredients(originalIngredients);
+    }
 
     startTransition(() => {
       setFilteredIngredients(
         originalIngredients.filter((p) =>
           currentLanguage === "en"
             ? p.name?.toLowerCase().includes(filterText.toLowerCase())
-            : p.nameTranslated.toLowerCase().includes(filterText.toLowerCase())
-        )
+            : p.nameTranslated.toLowerCase().includes(filterText.toLowerCase()),
+        ),
       );
     });
   };

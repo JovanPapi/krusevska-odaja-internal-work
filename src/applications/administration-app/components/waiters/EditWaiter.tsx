@@ -1,19 +1,16 @@
-import { Button, Form, Input, InputNumber, Modal } from "antd";
-import { Dispatch, SetStateAction } from "react";
+import { UpdateWaiterDTO } from "../../../../api/dto";
 import RestServices from "../../../../api/services";
 import Waiter from "../../../../models/Waiter";
-
+import { Button, Form, Input, InputNumber, Modal } from "antd";
+import { Dispatch, SetStateAction } from "react";
 import toast from "react-hot-toast";
 import { useIntl } from "react-intl";
-import { UpdateWaiterDTO } from "../../../../api/dto";
 
 interface EditWaiterProps {
   selectedWaiter: Waiter;
   editModalOpen: boolean;
   setReloadWaiters: Dispatch<SetStateAction<boolean | undefined>>;
-  setEditModalState: Dispatch<
-    SetStateAction<{ editModalOpen: boolean; selectedWaiter?: Waiter }>
-  >;
+  setEditModalState: Dispatch<SetStateAction<{ editModalOpen: boolean; selectedWaiter?: Waiter }>>;
 }
 
 /** Functional component used to update certain fields of selected waiter.
@@ -23,34 +20,26 @@ interface EditWaiterProps {
  *  upon updating the selected waiter
  * @param {Dispatch} setEditModalState Dispatch function that updates local state of Waiters.tsx component
  */
-const EditWaiter = ({
-  selectedWaiter,
-  editModalOpen,
-  setReloadWaiters,
-  setEditModalState,
-}: EditWaiterProps) => {
+const EditWaiter = ({ selectedWaiter, editModalOpen, setReloadWaiters, setEditModalState }: EditWaiterProps) => {
   const intl = useIntl();
 
   const [form] = Form.useForm();
 
-  const handleCloseModal = () =>
-    setEditModalState({ editModalOpen: false, selectedWaiter: undefined });
+  const handleCloseModal = () => setEditModalState({ editModalOpen: false, selectedWaiter: undefined });
 
   const handleEditWaiter = (updatedWaiter: UpdateWaiterDTO) => {
     form.validateFields();
 
     updatedWaiter.uuid = selectedWaiter.uuid;
 
-    RestServices.krusevska_odaja_WaiterController
-      .updateWaiter(updatedWaiter)
-      .then((res) => {
-        toast.success(res);
-        setEditModalState({
-          editModalOpen: false,
-          selectedWaiter: undefined,
-        });
-        setReloadWaiters((prevValue) => !prevValue);
+    RestServices.waiterController.updateWaiter(updatedWaiter).then((res) => {
+      toast.success(res);
+      setEditModalState({
+        editModalOpen: false,
+        selectedWaiter: undefined,
       });
+      setReloadWaiters((prevValue) => !prevValue);
+    });
   };
 
   const modalTitle = (
@@ -74,15 +63,13 @@ const EditWaiter = ({
             id: "adminPage.button.edit",
           })}
         </Button>,
-      ]}
-    >
+      ]}>
       <Form<UpdateWaiterDTO>
         id="editForm"
         labelCol={{ span: 8 }}
         form={form}
         onFinish={handleEditWaiter}
-        layout="vertical"
-      >
+        layout="vertical">
         <Form.Item<UpdateWaiterDTO>
           label={intl.formatMessage({ id: "adminPage.text.firstName" })}
           name="firstName"
@@ -97,13 +84,8 @@ const EditWaiter = ({
                 id: "adminPage.editWaiter.input.validation.firstName",
               }),
             },
-          ]}
-        >
-          <Input
-            style={{ width: "65%" }}
-            pattern="[A-Za-z\s]*"
-            placeholder="Michael"
-          />
+          ]}>
+          <Input style={{ width: "65%" }} pattern="[A-Za-z\s]*" placeholder="Michael" />
         </Form.Item>
 
         <Form.Item<UpdateWaiterDTO>
@@ -120,13 +102,8 @@ const EditWaiter = ({
                 id: "adminPage.editWaiter.input.validation.lastName",
               }),
             },
-          ]}
-        >
-          <Input
-            style={{ width: "65%" }}
-            pattern="[A-Za-z\s]*"
-            placeholder="Jordan"
-          />
+          ]}>
+          <Input style={{ width: "65%" }} pattern="[A-Za-z\s]*" placeholder="Jordan" />
         </Form.Item>
 
         <Form.Item<UpdateWaiterDTO>
@@ -143,15 +120,8 @@ const EditWaiter = ({
                 id: "adminPage.editWaiter.input.validation.code",
               }),
             },
-          ]}
-        >
-          <InputNumber
-            style={{ width: "65%" }}
-            placeholder="5"
-            maxLength={2}
-            min={0}
-            max={99}
-          />
+          ]}>
+          <InputNumber style={{ width: "65%" }} placeholder="5" maxLength={2} min={0} max={99} />
         </Form.Item>
       </Form>
     </Modal>

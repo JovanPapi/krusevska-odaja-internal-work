@@ -16,7 +16,7 @@ axiosInstance.interceptors.response.use(
   (error: AxiosError) => {
     toast.error(error.response?.data as string);
     return Promise.reject(error);
-  }
+  },
 );
 
 axiosInstance.interceptors.request.use(
@@ -29,7 +29,7 @@ axiosInstance.interceptors.request.use(
 
     return config;
   },
-  (error: AxiosError) => Promise.reject(error)
+  (error: AxiosError) => Promise.reject(error),
 );
 
 /** An async function which uses instance of axios for making request and returning Promise<T> result, which is later processed via .then() and .catch() methods.
@@ -38,13 +38,9 @@ axiosInstance.interceptors.request.use(
  * Request interceptor is implemented to put the generated bearer token from backend for user authorization, on all made requests
  * @param {string} url URL of the backend REST API
  * @param {MethodType} method Method for the HTTP request (GET, POST, PUT, DELETE)
- * @param {any} data Data returned from the backend REST API, it can be anything. Later this data is casted into specific data type (string, class, number etc.)
+ * @param {unknown} data Data returned from the backend REST API, it can be anything. Later this data is casted into specific data type (string, class, number etc.)
  */
-const axiosApi = async <T>(
-  url: string,
-  method: MethodType = "GET",
-  data: any = null
-): Promise<T> => {
+const axiosApi = async <T>(url: string, method: MethodType = "GET", data: unknown = null): Promise<T> => {
   return await axiosInstance({
     baseURL: `${BASE_URL + url}`,
     method,

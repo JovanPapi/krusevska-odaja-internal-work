@@ -1,24 +1,14 @@
-import {
-  Button,
-  Input,
-  Popconfirm,
-  Table,
-  TableColumnsType,
-  TablePaginationConfig,
-  TableProps,
-} from "antd";
-
-import { ChangeEvent, useEffect, useState, useTransition } from "react";
-import { useIntl } from "react-intl";
+import CreateProduct from "./CreateProduct";
+import EditProduct from "./EditProduct";
 import RestServices from "../../../../api/services";
 import Product from "../../../../models/Product";
 import { useLanguageSwitcherSelector } from "../../../../store/language-switcher/LanguageSwitcher";
-
 import { mapProductCategoryEnumValues } from "../../constants";
-import CreateProduct from "./CreateProduct";
-import EditProduct from "./EditProduct";
+import { Button, Input, Popconfirm, Table, TableColumnsType, TablePaginationConfig, TableProps } from "antd";
+import { ChangeEvent, useEffect, useState, useTransition } from "react";
 import "./Products.css";
 import toast from "react-hot-toast";
+import { useIntl } from "react-intl";
 
 interface TableParams {
   pagination: TablePaginationConfig;
@@ -54,25 +44,25 @@ const Products = () => {
   });
 
   useEffect(() => {
-    setIsDataLoading(true);
-    RestServices.krusevska_odaja_ProductController
-      .fetchProducts()
-      .then((response) => {
+    const loadData = async () => {
+      setIsDataLoading(true);
+      try {
+        const response = await RestServices.productController.fetchProducts();
         setOriginalProducts(response);
         setFilteredProducts(response);
+      } catch (err) {
+        toast.error(err as string);
+      } finally {
         setIsDataLoading(false);
-      })
-      .catch((err) => {
-        console.log(err);
-        setIsDataLoading(false);
-      });
+      }
+    };
+    loadData();
   }, [reloadProducts]);
 
   const columns: TableColumnsType<Product> = [
     {
       title: intl.formatMessage({ id: "adminPage.products.table.column.name" }),
-      render: (_, product) =>
-        currentLanguage === "en" ? product.name : product.nameTranslated,
+      render: (_, product) => (currentLanguage === "en" ? product.name : product.nameTranslated),
     },
     {
       title: intl.formatMessage({
@@ -90,8 +80,7 @@ const Products = () => {
       title: intl.formatMessage({
         id: "adminPage.products.table.column.category",
       }),
-      render: (_, product) =>
-        mapProductCategoryEnumValues(product.productCategory),
+      render: (_, product) => mapProductCategoryEnumValues(product.productCategory),
     },
     {
       title: intl.formatMessage({
@@ -99,11 +88,10 @@ const Products = () => {
       }),
       render: (_, record) =>
         record.listOfIngredients?.map((ing, index) => {
-          if (index === (record.listOfIngredients?.length as number) - 1)
+          if (index === (record.listOfIngredients?.length as number) - 1) {
             return currentLanguage === "en" ? ing.name : ing.nameTranslated;
-          return currentLanguage === "en"
-            ? ing.name + ", "
-            : ing.nameTranslated + ", ";
+          }
+          return currentLanguage === "en" ? ing.name + ", " : ing.nameTranslated + ", ";
         }),
     },
     {
@@ -114,8 +102,7 @@ const Products = () => {
         <div style={{ display: "flex", columnGap: "2.5rem" }}>
           <Popconfirm
             title={intl.formatMessage({ id: "adminPage.text.sureToDelete" })}
-            onConfirm={() => handleDeleteProduct(product.uuid as string)}
-          >
+            onConfirm={() => handleDeleteProduct(product.uuid as string)}>
             <span style={{ color: "blue", cursor: "pointer" }}>
               {intl.formatMessage({ id: "adminPage.text.delete" })}
             </span>
@@ -127,8 +114,7 @@ const Products = () => {
                 editModalOpen: true,
                 selectedProduct: product,
               });
-            }}
-          >
+            }}>
             {intl.formatMessage({ id: "adminPage.button.edit" })}
           </span>
         </div>
@@ -137,12 +123,10 @@ const Products = () => {
   ];
 
   const handleDeleteProduct = (productId: string) => {
-    RestServices.krusevska_odaja_ProductController
-      .deleteProductById(productId)
-      .then((response) => {
-        toast.success(response);
-        setReloadProducts(!reloadProducts);
-      });
+    RestServices.productController.deleteProductById(productId).then((response) => {
+      toast.success(response);
+      setReloadProducts(!reloadProducts);
+    });
   };
 
   const handleTableChange: TableProps<Product>["onChange"] = (pagination) => {
@@ -155,22 +139,18 @@ const Products = () => {
     const filterText = event.target.value;
     setFilterProductsInput(filterText);
 
-    if (filterText === "") setFilteredProducts(originalProducts);
+    if (filterText === "") {
+      setFilteredProducts(originalProducts);
+    }
 
     startTransition(() => {
-      setFilteredProducts(
-        originalProducts.filter((p) =>
-          p.name?.toLowerCase().includes(filterText.toLowerCase())
-        )
-      );
+      setFilteredProducts(originalProducts.filter((p) => p.name?.toLowerCase().includes(filterText.toLowerCase())));
     });
   };
 
   return (
     <div className="products-wrapper">
-      <h2 style={{ color: "white" }}>
-        {intl.formatMessage({ id: "adminPage.products.text.filterProducts" })}
-      </h2>
+      <h2 style={{ color: "white" }}>{intl.formatMessage({ id: "adminPage.products.text.filterProducts" })}</h2>
       <Input onChange={handleInputChange} value={filterProductsInput} />
       <br />
       <div style={{ textAlign: "end" }}>

@@ -53,6 +53,7 @@ const EditIngredient = ({
 
   return (
     <Modal
+      width="20%"
       open={editModalOpen}
       title={modalTitle}
       onCancel={handleCloseModal}
@@ -87,7 +88,7 @@ const EditIngredient = ({
               }),
             },
           ]}>
-          <Input style={{ width: "65%" }} pattern="[A-Za-z\s]*" placeholder="Onion.." />
+          <Input pattern="[A-Za-z\s]*" placeholder="Onion.." />
         </Form.Item>
 
         <Form.Item<Ingredient>
@@ -107,7 +108,7 @@ const EditIngredient = ({
               }),
             },
           ]}>
-          <Input style={{ width: "65%" }} placeholder="Кромид.." />
+          <Input placeholder="Кромид.." />
         </Form.Item>
       </Form>
     </Modal>

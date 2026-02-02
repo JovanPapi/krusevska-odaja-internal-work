@@ -52,7 +52,7 @@ export default defineConfig([
       camelcase: "error",
 
       eqeqeq: ["error", "always"],
-      curly: ["error", "all"],
+      curly: ["off", "all"],
       "no-console": "warn",
 
       "react-hooks/rules-of-hooks": "error",

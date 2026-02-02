@@ -44,6 +44,7 @@ const CreateWaiter = ({ createModalOpen, setReloadWaiters, setCreateModalOpen }:
   );
   return (
     <Modal
+      width="20%"
       open={createModalOpen}
       onCancel={handleCloseModal}
       title={modalTitle}
@@ -72,7 +73,7 @@ const CreateWaiter = ({ createModalOpen, setReloadWaiters, setCreateModalOpen }:
               }),
             },
           ]}>
-          <Input style={{ width: "65%" }} pattern="[A-Za-z\s]*" placeholder="Michael" />
+          <Input pattern="[A-Za-z\s]*" placeholder="Michael" />
         </Form.Item>
 
         <Form.Item<Waiter>
@@ -89,7 +90,7 @@ const CreateWaiter = ({ createModalOpen, setReloadWaiters, setCreateModalOpen }:
               }),
             },
           ]}>
-          <Input style={{ width: "65%" }} pattern="[A-Za-z\s]*" placeholder="Jordan" />
+          <Input pattern="[A-Za-z\s]*" placeholder="Jordan" />
         </Form.Item>
 
         <Form.Item<Waiter>
@@ -106,7 +107,7 @@ const CreateWaiter = ({ createModalOpen, setReloadWaiters, setCreateModalOpen }:
               }),
             },
           ]}>
-          <InputNumber style={{ width: "65%" }} placeholder="5" max={99} min={0} maxLength={2} />
+          <InputNumber style={{ width: "100%" }} placeholder="5" max={99} min={0} maxLength={2} />
         </Form.Item>
       </Form>
     </Modal>

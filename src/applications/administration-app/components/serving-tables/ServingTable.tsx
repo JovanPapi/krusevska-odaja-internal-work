@@ -109,7 +109,7 @@ const ServingTables = () => {
       title: intl.formatMessage({
         id: "adminPage.servingTable.table.column.waiterName",
       }),
-      dataIndex: "waiterName",
+      render: (_, servingTable) => <span>{`${servingTable.waiter?.firstName} ${servingTable.waiter?.lastName}`}</span>,
     },
     {
       title: intl.formatMessage({
@@ -199,7 +199,7 @@ const ServingTables = () => {
 
     startTransition(() => {
       setFilteredServingTables(
-        originalServingTables.filter((stp) => stp.waiterName?.toLowerCase().includes(filterText.toLowerCase())),
+        originalServingTables.filter((stp) => stp.waiter?.firstName?.toLowerCase().includes(filterText.toLowerCase())),
       );
     });
   };

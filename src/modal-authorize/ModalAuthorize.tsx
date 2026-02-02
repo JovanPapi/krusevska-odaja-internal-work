@@ -1,6 +1,7 @@
 import { AdminDTO } from "../api/dto";
 import RestServices from "../api/services";
 import { ActivePageStateProps, AuthorizationModalStateProps } from "../interfaces";
+import { useApplicationStoreSelector } from "../store/ApplicationStore";
 import { Button, Form, Input, Modal } from "antd";
 import { useForm } from "antd/es/form/Form";
 import { Dispatch, SetStateAction } from "react";
@@ -21,6 +22,8 @@ interface ModalAuthorizeProps {
 const ModalAuthorize = ({ authorizeModalState, setModalAuthorizeState, setActivePage }: ModalAuthorizeProps) => {
   const [form] = useForm();
 
+  const { setUser, setToken } = useApplicationStoreSelector();
+
   const intl = useIntl();
 
   if (authorizeModalState.modalOpen === false) {
@@ -34,13 +37,13 @@ const ModalAuthorize = ({ authorizeModalState, setModalAuthorizeState, setActive
 
   const activePage =
     authorizeModalState.activePage.administrationPage === true
-      ? "adminPage"
+      ? "administrationPage"
       : authorizeModalState.activePage.kitchenPage === true
         ? "kitchenPage"
         : "waiterPage";
 
   const modalTitle =
-    activePage === "adminPage"
+    activePage === "administrationPage"
       ? "modalAuthorize.title.adminPage"
       : activePage === "waiterPage"
         ? "modalAuthorize.title.waiterPage"
@@ -51,9 +54,15 @@ const ModalAuthorize = ({ authorizeModalState, setModalAuthorizeState, setActive
 
     RestServices.authenticateController
       .authenticateUser(adminDTO)
-      .then((responseJWT) => {
-        sessionStorage.setItem("adminToken", responseJWT); // generated token for successfull login by an admin
+      .then((response) => {
+        const { user, token } = response.data;
+
+        sessionStorage.setItem("token", token); // generated token for successfull login by an admin
         sessionStorage.setItem("activePage", activePage);
+        sessionStorage.setItem("user", JSON.stringify(user));
+
+        setUser(user);
+        setToken(token);
 
         // clearSelectedWaiterAndTable(); when switching from waiter to other application, we delete waiter filled data
         //  (wont be necessary with the new changes, only one application available at a time)

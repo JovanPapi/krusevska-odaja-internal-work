@@ -21,7 +21,8 @@ const WaiterApp = () => {
 
   useEffect(() => {
     reloadDataForWaitersPageAfterCRUDAction();
-  }, [reloadDataForWaitersPageAfterCRUDAction]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <>

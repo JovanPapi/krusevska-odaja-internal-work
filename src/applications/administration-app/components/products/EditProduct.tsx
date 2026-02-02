@@ -51,6 +51,7 @@ const EditProduct = ({ selectedProduct, editModalOpen, setEditModalState, setRel
 
   return (
     <Modal
+      width="20%"
       open={editModalOpen}
       title={modalTitle}
       onCancel={handleCloseModal}
@@ -80,7 +81,7 @@ const EditProduct = ({ selectedProduct, editModalOpen, setEditModalState, setRel
               }),
             },
           ]}>
-          <Input style={{ width: "75%" }} pattern="[A-Za-z\s]*" placeholder="White wine.." />
+          <Input pattern="[A-Za-z\s]*" placeholder="White wine.." />
         </Form.Item>
 
         <Form.Item<Product>
@@ -100,7 +101,7 @@ const EditProduct = ({ selectedProduct, editModalOpen, setEditModalState, setRel
               }),
             },
           ]}>
-          <Input style={{ width: "75%" }} placeholder="Бело вино.." />
+          <Input placeholder="Бело вино.." />
         </Form.Item>
 
         <Form.Item<Product>
@@ -120,7 +121,7 @@ const EditProduct = ({ selectedProduct, editModalOpen, setEditModalState, setRel
               }),
             },
           ]}>
-          <InputNumber style={{ width: "75%" }} min={0} max={10000} placeholder="90" />
+          <InputNumber style={{ width: "100%" }} min={0} max={10000} placeholder="90" />
         </Form.Item>
 
         <Form.Item<Product>
@@ -130,7 +131,7 @@ const EditProduct = ({ selectedProduct, editModalOpen, setEditModalState, setRel
           name="description"
           initialValue={selectedProduct.description}
           rules={[{ required: false }]}>
-          <TextArea style={{ width: "75%", textAlign: "center" }} />
+          <TextArea style={{ textAlign: "center" }} />
         </Form.Item>
 
         <Form.Item<Product>
@@ -150,7 +151,7 @@ const EditProduct = ({ selectedProduct, editModalOpen, setEditModalState, setRel
               }),
             },
           ]}>
-          <Select style={{ width: "75%" }} options={productCategoryStringArray} />
+          <Select options={productCategoryStringArray} />
         </Form.Item>
       </Form>
     </Modal>

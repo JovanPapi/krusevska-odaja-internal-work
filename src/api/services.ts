@@ -9,6 +9,7 @@ import {
   ServingTableDTO,
   UpdateServingTableDTO,
   UpdateWaiterDTO,
+  UserProfile,
 } from "./dto";
 import { endpoints } from "./endpoints";
 import Ingredient from "../models/Ingredient";
@@ -21,7 +22,11 @@ const RestServices = {
   /** Contains functions that make HTTP requests to Authenticate API */
   authenticateController: {
     authenticateUser: (adminDTO: AdminDTO) =>
-      axiosApi<string>(endpoints.authenticateController.authenticate(), "POST", adminDTO),
+      axiosApi<{ statusCode: number; data: { user: UserProfile; token: string } }>(
+        endpoints.authenticateController.authenticate(),
+        "POST",
+        adminDTO,
+      ),
   },
 
   /** Contains functions that make HTTP requests to Product API */

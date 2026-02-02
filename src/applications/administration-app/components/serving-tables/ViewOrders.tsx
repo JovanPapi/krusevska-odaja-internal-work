@@ -32,7 +32,7 @@ const ViewOrdersModal = ({ viewOrdersModal, setViewOrdersModal, setReloadServing
     <div>
       <p>
         <b>{intl.formatMessage({ id: "adminPage.viewOrders.title.waiter" })}</b>{" "}
-        {viewOrdersModal.selectedServingTable?.waiterName}
+        {`${viewOrdersModal.selectedServingTable?.waiter?.firstName} ${viewOrdersModal.selectedServingTable?.waiter?.lastName}`}
       </p>
       <p>
         <b>

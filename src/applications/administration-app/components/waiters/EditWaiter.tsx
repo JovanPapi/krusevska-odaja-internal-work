@@ -51,6 +51,7 @@ const EditWaiter = ({ selectedWaiter, editModalOpen, setReloadWaiters, setEditMo
 
   return (
     <Modal
+      width="20%"
       open={editModalOpen}
       title={modalTitle}
       onCancel={handleCloseModal}
@@ -85,7 +86,7 @@ const EditWaiter = ({ selectedWaiter, editModalOpen, setReloadWaiters, setEditMo
               }),
             },
           ]}>
-          <Input style={{ width: "65%" }} pattern="[A-Za-z\s]*" placeholder="Michael" />
+          <Input pattern="[A-Za-z\s]*" placeholder="Michael" />
         </Form.Item>
 
         <Form.Item<UpdateWaiterDTO>
@@ -103,7 +104,7 @@ const EditWaiter = ({ selectedWaiter, editModalOpen, setReloadWaiters, setEditMo
               }),
             },
           ]}>
-          <Input style={{ width: "65%" }} pattern="[A-Za-z\s]*" placeholder="Jordan" />
+          <Input pattern="[A-Za-z\s]*" placeholder="Jordan" />
         </Form.Item>
 
         <Form.Item<UpdateWaiterDTO>
@@ -121,7 +122,7 @@ const EditWaiter = ({ selectedWaiter, editModalOpen, setReloadWaiters, setEditMo
               }),
             },
           ]}>
-          <InputNumber style={{ width: "65%" }} placeholder="5" maxLength={2} min={0} max={99} />
+          <InputNumber style={{ width: "100%" }} placeholder="5" maxLength={2} min={0} max={99} />
         </Form.Item>
       </Form>
     </Modal>

@@ -21,7 +21,7 @@ axiosInstance.interceptors.response.use(
 
 axiosInstance.interceptors.request.use(
   (config) => {
-    const token = sessionStorage.getItem("adminToken");
+    const token = sessionStorage.getItem("token");
 
     if (token !== null) {
       config.headers["Authorization"] = `Bearer ${token}`;

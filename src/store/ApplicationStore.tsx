@@ -1,3 +1,4 @@
+import { UserProfile } from "../api/dto";
 import RestServices from "../api/services";
 import Order from "../models/Order";
 import Product from "../models/Product";
@@ -13,6 +14,10 @@ interface ApplicationStoreProps {
   selectedServingTable?: ServingTable;
   selectedServingTableOrder?: Order;
   isDataLoading: boolean;
+  user: UserProfile | undefined;
+  token: string | undefined;
+  setUser: (user: UserProfile) => void;
+  setToken: (token: string) => void;
   saveSelectedWaiterByCode: (waiterCode: string) => void;
   saveSelectedServingTableByCode: (tableCode: string) => void;
   saveSelectedServingTableOrderByCode: (orderCode: number) => void;
@@ -28,11 +33,16 @@ const initialState: ApplicationStoreProps = {
   selectedServingTable: undefined,
   selectedServingTableOrder: undefined,
   isDataLoading: true,
+  user: undefined,
+  token: undefined,
+  setUser: () => null,
+  setToken: () => null,
   saveSelectedWaiterByCode: () => null,
   saveSelectedServingTableByCode: () => null,
   saveSelectedServingTableOrderByCode: () => null,
   saveProductToServingTable: () => null,
   reloadDataForWaitersPageAfterCRUDAction: () => null,
+
   clearStorage: () => null,
 };
 
@@ -59,8 +69,11 @@ function ApplicationStoreProvider({ children }: { children: ReactNode }) {
 
   const [reloadData, setReloadData] = useState<boolean>();
 
+  const [user, setUserProfile] = useState<UserProfile | undefined>(undefined);
+  const [token, setUserToken] = useState<string | undefined>(undefined);
+
   useEffect(() => {
-    const adminToken = sessionStorage.getItem("adminToken");
+    const adminToken = sessionStorage.getItem("token");
     if (adminToken !== null) {
       setReloadData(true);
     }
@@ -119,7 +132,15 @@ function ApplicationStoreProvider({ children }: { children: ReactNode }) {
       }
     };
     loadData();
-  }, [reloadData, refreshSelectedWaiterAfterChargingTable]);
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [reloadData]);
+
+  const setUser = (user: UserProfile) => {
+    setUserProfile(user);
+  };
+
+  const setToken = (token: string) => setUserToken(token);
 
   /** A function that selected waiter from original waiters list by code */
   const saveSelectedWaiterByCode = (waiterCode: string) => {
@@ -199,6 +220,8 @@ function ApplicationStoreProvider({ children }: { children: ReactNode }) {
     setSelectedServingTable(undefined);
     setSelectedServingTableOrder(undefined);
     setSelectedWaiter(undefined);
+    setUserProfile(undefined);
+    setUserToken(undefined);
     sessionStorage.clear();
   };
 
@@ -211,6 +234,10 @@ function ApplicationStoreProvider({ children }: { children: ReactNode }) {
         selectedServingTable,
         selectedServingTableOrder,
         isDataLoading,
+        user,
+        token,
+        setToken,
+        setUser,
         saveSelectedWaiterByCode,
         saveSelectedServingTableByCode,
         saveSelectedServingTableOrderByCode,

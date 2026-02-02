@@ -67,6 +67,7 @@ const CreateProduct = ({ createModalOpen, setReloadProducts, setCreateModalOpen 
 
   return (
     <Modal
+      width="20%"
       open={createModalOpen}
       onCancel={handleCloseModal}
       title={modalTitle}
@@ -100,7 +101,7 @@ const CreateProduct = ({ createModalOpen, setReloadProducts, setCreateModalOpen 
           tooltip={intl.formatMessage({
             id: "adminPage.tooltip.enterTextOnly",
           })}>
-          <Input style={{ width: "75%" }} pattern="[A-Za-z\s]*" placeholder="White wine..." />
+          <Input pattern="[A-Za-z\s]*" placeholder="White wine..." />
         </Form.Item>
 
         <Form.Item<Product>
@@ -119,7 +120,7 @@ const CreateProduct = ({ createModalOpen, setReloadProducts, setCreateModalOpen 
           tooltip={intl.formatMessage({
             id: "adminPage.tooltip.enterTextOnly",
           })}>
-          <Input style={{ width: "75%" }} placeholder="Бело вино..." />
+          <Input placeholder="Бело вино..." />
         </Form.Item>
 
         <Form.Item<Product>
@@ -138,7 +139,7 @@ const CreateProduct = ({ createModalOpen, setReloadProducts, setCreateModalOpen 
               }),
             },
           ]}>
-          <InputNumber style={{ width: "75%" }} min={0} max={10000} placeholder="350..." />
+          <InputNumber style={{ width: "100%" }} min={0} max={10000} placeholder="350..." />
         </Form.Item>
 
         <Form.Item<Product>
@@ -149,7 +150,7 @@ const CreateProduct = ({ createModalOpen, setReloadProducts, setCreateModalOpen 
           tooltip={intl.formatMessage({
             id: "adminPage.tooltip.additionalDescriptionForProduct",
           })}>
-          <TextArea style={{ width: "75%" }} />
+          <TextArea />
         </Form.Item>
 
         <Form.Item<Product>
@@ -168,7 +169,7 @@ const CreateProduct = ({ createModalOpen, setReloadProducts, setCreateModalOpen 
               }),
             },
           ]}>
-          <Select style={{ width: "75%" }} options={productCategoryStringArray} />
+          <Select options={productCategoryStringArray} />
         </Form.Item>
 
         <Form.Item<string>
@@ -180,7 +181,6 @@ const CreateProduct = ({ createModalOpen, setReloadProducts, setCreateModalOpen 
           })}>
           <Tooltip title={mapIngredientsToString}>
             <Input
-              style={{ width: "75%" }}
               placeholder="Hard cheese, leak, onions..."
               onChange={(e) => setInputIngredients(e.target.value)}
               pattern="[A-Za-z,\s]*"

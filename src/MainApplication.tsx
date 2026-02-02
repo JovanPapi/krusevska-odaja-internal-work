@@ -31,13 +31,24 @@ const MainApplication = () => {
     modalOpen: false,
   });
 
-  const { clearStorage } = useApplicationStoreSelector();
+  const { clearStorage, setToken, setUser, token } = useApplicationStoreSelector();
 
   useEffect(() => {
-    const activePage = sessionStorage.getItem("activePage");
-    setActivePage((prevState) => {
-      return { ...prevState, [activePage as string]: true };
-    });
+    const sessionToken = sessionStorage.getItem("token");
+
+    if (sessionToken !== null) {
+      setToken(sessionToken);
+
+      const activePage = sessionStorage.getItem("activePage");
+
+      setActivePage((prevState) => {
+        return { ...prevState, [activePage as string]: true };
+      });
+
+      const user = JSON.parse(sessionStorage.getItem("user") as string);
+      setUser(user);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const changeLanguageMenu: MenuProps["items"] = [
@@ -62,7 +73,7 @@ const MainApplication = () => {
   ];
 
   const handleUserLogout = () => {
-    if (sessionStorage.getItem("adminToken") === null) {
+    if (sessionStorage.getItem("user") === null) {
       toast.error("No user is logged in");
       return;
     }
@@ -89,9 +100,7 @@ const MainApplication = () => {
         </Flex>
       </Sider>
 
-      {JSON.stringify(activePage) === JSON.stringify(activePageInitialState) ? (
-        <ApplicationStarterLogin setAuthorizeModalState={setAuthorizeModalState} />
-      ) : null}
+      {token === undefined ? <ApplicationStarterLogin setAuthorizeModalState={setAuthorizeModalState} /> : null}
 
       {activePage.administrationPage === true ? (
         <AdministratorApp />

@@ -68,7 +68,7 @@ const Payment = () => {
       title: intl.formatMessage({
         id: "adminPage.payments.table.column.waiterName",
       }),
-      dataIndex: "waiterName",
+      render: (_, payment) => <span>{`${payment.waiter?.firstName} ${payment.waiter?.lastName}`}</span>,
     },
   ];
 
@@ -88,7 +88,7 @@ const Payment = () => {
 
     startTransition(() => {
       setFilteredPayments(
-        originalPayments.filter((p) => p.waiterName?.toLowerCase().includes(filterText.toLowerCase())),
+        originalPayments.filter((p) => p.waiter?.firstName?.toLowerCase().includes(filterText.toLowerCase())),
       );
     });
   };

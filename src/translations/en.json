@@ -68,7 +68,7 @@
   "adminpage.ingredients.text.createNewIngredient": "Create new ingredient",
   "adminPage.editIngredient.text.title": "Edit ingredient:",
   "adminPage.editIngredient.form.label.name": "Name",
-  "adminPage.editIngredient.form.label.nameTranslated": "Name translated to macedonian",
+  "adminPage.editIngredient.form.label.nameTranslated": "Name in macedonian",
   "adminPage.editIngredient.input.name.validation": "Please insert name of ingredient",
   "adminPage.createIngredient.text.title": "Create new ingredient",
 
@@ -98,7 +98,7 @@
   "adminPage.products.button.createNewProduct": "Create new product",
   "adminPage.editProduct.title.text": "Edit product:",
   "adminPage.editProduct.form.label.name": "Name",
-  "adminPage.editProduct.form.label.nameTranslated": "Name translated to macedonian",
+  "adminPage.editProduct.form.label.nameTranslated": "Name in macedonian",
   "adminPage.editProduct.form.label.price": "Price",
   "adminPage.editProduct.form.label.description": "Description",
   "adminPage.editProduct.form.label.category": "Category",

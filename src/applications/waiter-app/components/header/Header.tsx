@@ -57,16 +57,19 @@ const Header = () => {
     saveSelectedServingTableByCode(tableNumber);
   };
 
-  const tempCompletedKOs = () =>
-    listCompletedKitchenOrders.map((ko) => {
-      return (
-        <p>
-          {intl.formatMessage({ id: "header.dropdown.menuItem.text1" })} {ko.order?.code}{" "}
-          {intl.formatMessage({ id: "header.dropdown.menuItem.text2" })} {ko.servingTable?.code}{" "}
-          {intl.formatMessage({ id: "header.dropdown.menuItem.text3" })}
-        </p>
-      );
-    });
+  const tempCompletedKOs = () => {
+    if (listCompletedKitchenOrders.length === 0) return <p>No new updates...</p>;
+    else
+      return listCompletedKitchenOrders.map((ko) => {
+        return (
+          <p>
+            {intl.formatMessage({ id: "header.dropdown.menuItem.text1" })} {ko.order?.code}{" "}
+            {intl.formatMessage({ id: "header.dropdown.menuItem.text2" })} {ko.servingTable?.code}{" "}
+            {intl.formatMessage({ id: "header.dropdown.menuItem.text3" })}
+          </p>
+        );
+      });
+  };
 
   return (
     <div className="header-wrapper">

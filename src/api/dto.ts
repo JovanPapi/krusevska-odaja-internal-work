@@ -46,7 +46,7 @@ export interface PaymentDTO {
   /** How much did the customer paid. */
   amountPaid?: number;
   /** Name of the waiter who made the payment. */
-  waiterName?: string;
+  waiter?: { firstName: string; lastName: string };
 }
 
 /** Interface that defines a shape of object used in HTTP request as body, meant to process admin data and logs him in the application if request data is correct. */
@@ -54,6 +54,13 @@ export interface AdminDTO {
   username: string;
   /** Password of the admin account. */
   password: string;
+}
+
+export interface UserProfile {
+  uuid: number;
+  firstName: string;
+  lastName: string;
+  username: string;
 }
 
 /** Interface that defines a shape of object meant to be mapped inside a table and display all serving tables from the database.
@@ -74,7 +81,7 @@ export interface ServingTableDTO {
   /** Status of the table (OPEN, CLOSED). */
   servingTableStatus?: string;
   /** Name of the waiter that is responsible for the table. */
-  waiterName?: string;
+  waiter?: { firstName: string; lastName: string };
   /** All orders made for the table. */
   listOfOrders?: Order[];
   /** All payments made for the table. */

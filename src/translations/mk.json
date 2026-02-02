@@ -68,7 +68,7 @@
   "adminpage.ingredients.text.createNewIngredient": "Креирај нова состојка",
   "adminPage.editIngredient.text.title": "Ажурирај состојка:",
   "adminPage.editIngredient.form.label.name": "Име",
-  "adminPage.editIngredient.form.label.nameTranslated": "Име преведено на македонски",
+  "adminPage.editIngredient.form.label.nameTranslated": "Име на македонски",
   "adminPage.editIngredient.input.name.validation": "Ве молам внесете име на состојката",
   "adminPage.createIngredient.text.title": "Креирај нова состојка",
 
@@ -98,7 +98,7 @@
   "adminPage.products.button.createNewProduct": "Креирај нов продукт",
   "adminPage.editProduct.title.text": "Ажурирај продукт:",
   "adminPage.editProduct.form.label.name": "Име",
-  "adminPage.editProduct.form.label.nameTranslated": "Име преведено на македонски",
+  "adminPage.editProduct.form.label.nameTranslated": "Име на македонски",
   "adminPage.editProduct.form.label.price": "Цена",
   "adminPage.editProduct.form.label.description": "Опис",
   "adminPage.editProduct.form.label.category": "Категорија",
